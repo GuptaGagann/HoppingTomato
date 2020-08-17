@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Hopping Tomato</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Hopping Tomato</string>
+    <string name="nav_header_subtitle">https://hoppingtomato.com/index</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_signup">Create Account</string>
+    <string name="title_activity_forgot_pass">Forgot Password?</string>
+    <string name="title_activity_faq">FAQs</string>
+    <string name="title_activity_about">About Us</string>
+    <string name="title_activity_contact">Contact Us</string>
+    <string name="title_activity_cuisine">Find a Chef</string>
+    <string name="search_hint">Select Cuisine</string>
+</resources>

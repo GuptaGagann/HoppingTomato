@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/chef2"
+    android:backgroundTint="#80FFFFFF"
+    android:backgroundTintMode="src_over"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".about"
+    tools:showIn="@layout/app_bar_about"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:fontFamily="@font/dancing_script"
+        android:gravity="center_horizontal"
+        android:text="About Us"
+        android:textAllCaps="false"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Tab"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="30dp"
+        android:textStyle="bold" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:paddingHorizontal="10dp"
+            android:text="In time immemorial, various delicious cuisines around the world, that riches could find, have remained an enigma for people.\n\nAlways questioning what made the food so exquisite.\n\nYes, going to a restaurant of your favorite food puts an end to the wondering, but how far do we need to go for satisfying that hunger?\n\nThe time to go through traffic and its honking music, making prior bookings if your choice is too famous, the disappointment if the chef-in-house isn't who you expected and most of all waiting... in line, during rush hours and delaying traffic.\n\nHopping Tomato aims to bring the same experience to your doorstep.\n\nWith the help of our chefs, who love making food as much as you will enjoy eating it, we are going to put an end to it once and for all.\n\nHopping Tomato will be your personal concierge to a number of chefs cooking and serving cuisines that make you drool a little.\n\nThis will enable our customers to see, smell, hear and taste the entire meal."
+            android:justificationMode="inter_word"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Widget.PopupMenu"
+            android:textColor="#2f2f2f"
+            android:textSize="15dp" />
+    </ScrollView>
+
+</LinearLayout>

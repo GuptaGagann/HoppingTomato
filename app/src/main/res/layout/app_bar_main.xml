@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:orientation="vertical">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        app:srcCompat="@drawable/ht" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+        android:layout_weight="1">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingVertical="@dimen/linear_layout_margin">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Email:"
+                    android:layout_marginLeft="@dimen/linear_layout_margin"/>
+                <EditText
+                    android:id="@+id/editText"
+                    style="@style/Widget.MaterialComponents.TextInputEditText.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="someone@example.com"
+                    android:inputType="textEmailAddress"
+                    android:layout_marginHorizontal="@dimen/linear_layout_margin"
+                    android:layout_marginBottom="@dimen/linear_layout_margin"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Password:"
+                    android:layout_marginLeft="@dimen/linear_layout_margin"/>
+                <EditText
+                    android:id="@+id/editText2"
+                    style="@style/Widget.MaterialComponents.TextInputEditText.OutlinedBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    android:hint="********"
+                    android:layout_marginHorizontal="@dimen/linear_layout_margin"
+                    android:layout_marginBottom="@dimen/linear_layout_margin"/>
+
+                <Button
+                    android:id="@+id/button"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:minHeight="0dp"
+                    android:background="@android:color/holo_orange_dark"
+                    android:text="Login"
+                    android:paddingHorizontal="20dp"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:layout_margin="@dimen/linear_layout_margin"/>
+
+                <Button
+                    android:id="@+id/button2"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:minHeight="0dp"
+                    android:background="@android:color/holo_red_dark"
+                    android:text="Create New Account"
+                    android:paddingHorizontal="20dp"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/white"
+                    android:layout_margin="@dimen/linear_layout_margin"/>
+
+                <Button
+                    android:backgroundTint="@android:color/white"
+                    android:id="@+id/button3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="5dp"
+                    android:minHeight="0dp"
+                    android:background="@android:color/white"
+                    android:text="Forgot Password?"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@android:drawable/ic_dialog_email" />
+
+</LinearLayout>
