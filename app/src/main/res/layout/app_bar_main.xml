@@ -47,22 +47,24 @@
                     android:layout_height="wrap_content"
                     android:text="Email:"
                     android:layout_marginLeft="@dimen/linear_layout_margin"/>
+
                 <EditText
-                    android:id="@+id/editText"
+                    android:id="@+id/email"
                     style="@style/Widget.MaterialComponents.TextInputEditText.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="someone@example.com"
-                    android:inputType="textEmailAddress"
                     android:layout_marginHorizontal="@dimen/linear_layout_margin"
-                    android:layout_marginBottom="@dimen/linear_layout_margin"/>
+                    android:layout_marginBottom="@dimen/linear_layout_margin"
+                    android:hint="someone@example.com"
+                    android:inputType="textEmailAddress" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Password:"
                     android:layout_marginLeft="@dimen/linear_layout_margin"/>
                 <EditText
-                    android:id="@+id/editText2"
+                    android:id="@+id/password"
                     style="@style/Widget.MaterialComponents.TextInputEditText.OutlinedBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -72,7 +74,7 @@
                     android:layout_marginBottom="@dimen/linear_layout_margin"/>
 
                 <Button
-                    android:id="@+id/button"
+                    android:id="@+id/Login"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:minHeight="0dp"

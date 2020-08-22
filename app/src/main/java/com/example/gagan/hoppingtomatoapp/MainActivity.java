@@ -1,10 +1,13 @@
 package com.example.gagan.hoppingtomatoapp;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,17 +21,28 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    EditText Email, Password;
+    Button LogIn ;
 
-    Button reg, login, pass;
+    Button reg, pass;
     String name, password, email;
-    EditText t1, t2;
+
     DrawerLayout mDrawerLayout;
     ActionBarDrawerToggle toggle;
+    String PasswordHolder, EmailHolder;
+    String finalResult ;
+    String HttpURL = "https://namang344.000webhostapp.com/UserLogin.php";
+    Boolean CheckEditText ;
+    ProgressDialog progressDialog;
+    HashMap<String,String> hashMap = new HashMap<>();
+    HttpParse httpParse = new HttpParse();
+    public static final String UserEmail = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +50,9 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        Email = (EditText)findViewById(R.id.email);
+        Password = (EditText)findViewById(R.id.password);
+        LogIn = (Button)findViewById(R.id.Login);
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
@@ -48,37 +65,25 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        t1 = findViewById(R.id.editText);
-        t2 = findViewById(R.id.editText2);
-
-        final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
-
-        login = findViewById(R.id.button);
-        login.setOnClickListener(new View.OnClickListener() {
+        LogIn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
 
-                email=t1.getText().toString();
-                password=t2.getText().toString();
+                CheckEditTextIsEmptyOrNot();
 
-                if(email.equals("")){
-                    Toast.makeText(MainActivity.this, "Email Can't be Empty.", 4000).show();
-                }
-                else if(!VALID_EMAIL_ADDRESS_REGEX.matcher(email).matches()){
-                    Toast.makeText(MainActivity.this, "Incorrect email.", 4000).show();
-                }
-                else if(password.equals("")){
-                    Toast.makeText(MainActivity.this, "Password Can't be Empty.", 4000).show();
-                }
-                else if(password.length()<8){
-                    Toast.makeText(MainActivity.this, "Password should be at least 8 characters long.", 4000).show();
+                if(CheckEditText){
+
+                    UserLoginFunction(EmailHolder, PasswordHolder);
+
                 }
                 else {
-                    Toast.makeText(MainActivity.this, "Logging in...", 4000).show();
+
+                    Toast.makeText(MainActivity.this, "Please fill all form fields.", Toast.LENGTH_LONG).show();
+
                 }
+
             }
         });
-
         reg = findViewById(R.id.button2);
         reg.setOnClickListener(new View.OnClickListener() {
 
@@ -108,6 +113,74 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    public void CheckEditTextIsEmptyOrNot(){
+
+        EmailHolder = Email.getText().toString();
+        PasswordHolder = Password.getText().toString();
+
+        if(TextUtils.isEmpty(EmailHolder) || TextUtils.isEmpty(PasswordHolder))
+        {
+            CheckEditText = false;
+        }
+        else {
+
+            CheckEditText = true ;
+        }
+    }
+    public void UserLoginFunction(final String email, final String password){
+
+        class UserLoginClass extends AsyncTask<String,Void,String> {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+
+                progressDialog = ProgressDialog.show(MainActivity.this,"Loading Data",null,true,true);
+            }
+
+            @Override
+            protected void onPostExecute(String httpResponseMsg) {
+
+                super.onPostExecute(httpResponseMsg);
+
+                progressDialog.dismiss();
+
+                if(httpResponseMsg.equalsIgnoreCase("Data Matched")){
+
+                    finish();
+
+                    Intent intent = new Intent(MainActivity.this, Dashboard.class);
+
+                    intent.putExtra(UserEmail,email);
+
+                    startActivity(intent);
+
+                }
+                else{
+
+                    Toast.makeText(MainActivity.this,httpResponseMsg,Toast.LENGTH_LONG).show();
+                }
+
+            }
+
+            @Override
+            protected String doInBackground(String... params) {
+
+                hashMap.put("email",params[0]);
+
+                hashMap.put("password",params[1]);
+
+                finalResult = httpParse.postRequest(hashMap, HttpURL);
+
+                return finalResult;
+            }
+        }
+
+        UserLoginClass userLoginClass = new UserLoginClass();
+
+        userLoginClass.execute(email,password);
     }
 
     @Override

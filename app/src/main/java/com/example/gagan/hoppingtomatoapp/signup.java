@@ -1,10 +1,13 @@
 package com.example.gagan.hoppingtomatoapp;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -24,14 +27,21 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.HashMap;
 import java.util.regex.Pattern;
 
 public class signup extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    EditText t1, t2, t3, t4;
-    Bundle b1=new Bundle();
-    Button signup;
+    Button register, log_in;
+    EditText First_Name, Last_Name, Email, Password ;
+    String F_Name_Holder, L_Name_Holder, EmailHolder, PasswordHolder;
+    String finalResult ;
+    String HttpURL = "https://namang344.000webhostapp.com/UserRegistration.php";
+    Boolean CheckEditText ;
+    ProgressDialog progressDialog;
+    HashMap<String,String> hashMap = new HashMap<>();
+    HttpParse httpParse = new HttpParse();
     Spinner dd,mm,yy;
     String date,year,month, name,email,password,cpassword;
     ArrayAdapter<String> a;
@@ -40,18 +50,19 @@ public class signup extends AppCompatActivity
     String y[]={"1980","1981","1982","1983","1984","1985","1986","1987","1988","1989","1990","1991","1992","1993","1994","1995","1996","1997","1998","1999","2000","2001","2002","2003","2004","2005","2006","2007","2008","2009","2010"};
     DrawerLayout sup;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-
-        t1=(EditText)findViewById(R.id.editText8);
-        t1.requestFocus();
-        t2=(EditText)findViewById(R.id.editText5);
-        t3=(EditText)findViewById(R.id.editText6);
-        t4=(EditText)findViewById(R.id.editText7);
-
+        First_Name = (EditText)findViewById(R.id.editTextF_Name);
+        Last_Name = (EditText)findViewById(R.id.editTextL_Name);
+        Email = (EditText)findViewById(R.id.editTextEmail);
+        Password = (EditText)findViewById(R.id.editTextPassword);
         sup=(DrawerLayout)findViewById(R.id.drawer_layout);
+
+        register = (Button)findViewById(R.id.Submit);
+        log_in = (Button)findViewById(R.id.Login);
 
         final Switch simpleSwitch = (Switch) findViewById(R.id.switch3);
 
@@ -80,9 +91,6 @@ public class signup extends AppCompatActivity
 
             }
         });
-
-        signup=(Button)findViewById(R.id.button4);
-
         dd=(Spinner)findViewById(R.id.spinner);
         mm=(Spinner)findViewById(R.id.spinner1);
         yy=(Spinner)findViewById(R.id.spinner2);
@@ -139,50 +147,39 @@ public class signup extends AppCompatActivity
             }
         });
 
-        final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
-
-        signup.setOnClickListener(new View.OnClickListener() {
+        //Adding Click Listener on button.
+        register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                name=t1.getText().toString();
-                email=t2.getText().toString();
-                password=t3.getText().toString();
-                cpassword=t4.getText().toString();
+                // Checking whether EditText is Empty or Not
+                CheckEditTextIsEmptyOrNot();
 
-                if(name.equals("")){
-                    Toast.makeText(signup.this, "Name Can't be Empty.", 4000).show();
-                }
-                else if(email.equals("")){
-                    Toast.makeText(signup.this, "Email Can't be Empty.", 4000).show();
-                }
-                else if(!VALID_EMAIL_ADDRESS_REGEX.matcher(email).matches()){
-                    Toast.makeText(signup.this, "Incorrect email.", 4000).show();
-                }
-                else if(password.equals("")){
-                    Toast.makeText(signup.this, "Password Can't be Empty.", 4000).show();
-                }
-                else if(!password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$")){
-                    Toast.makeText(signup.this, "Password should be in appropriate format.", 4000).show();
-                }
-                else if(password.length()<8){
-                    Toast.makeText(signup.this, "Password should be at least 8 characters long.", 4000).show();
-                }
-                else if(cpassword.equals("")){
-                    Toast.makeText(signup.this, "Password Can't be Empty.", 4000).show();
-                }
-                else if(!password.equals(cpassword)){
-                    Toast.makeText(signup.this, "Password doesn't match.", 4000).show();
+                if(CheckEditText){
+
+                    // If EditText is not empty and CheckEditText = True then this block will execute.
+
+                    UserRegisterFunction(F_Name_Holder,L_Name_Holder, EmailHolder, PasswordHolder);
+
                 }
                 else {
-                    b1.putString("nm", name);
-                    b1.putString("unm", email);
-                    b1.putString("pwd", password);
-                    Toast.makeText(signup.this, "Account created successfully!", 4000).show();
-                    Intent i = new Intent(signup.this, MainActivity.class);
-                    i.putExtras(b1);
-                    startActivity(i);
+
+                    // If EditText is empty then this block will execute .
+                    Toast.makeText(signup.this, "Please fill all form fields.", Toast.LENGTH_LONG).show();
+
                 }
+
+
+            }
+        });
+
+        log_in.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(signup.this,MainActivity.class);
+                startActivity(intent);
+
             }
         });
 
@@ -207,6 +204,69 @@ public class signup extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+    public void CheckEditTextIsEmptyOrNot(){
+
+        F_Name_Holder = First_Name.getText().toString();
+        L_Name_Holder = Last_Name.getText().toString();
+        EmailHolder = Email.getText().toString();
+        PasswordHolder = Password.getText().toString();
+
+
+        if(TextUtils.isEmpty(F_Name_Holder) || TextUtils.isEmpty(L_Name_Holder) || TextUtils.isEmpty(EmailHolder) || TextUtils.isEmpty(PasswordHolder))
+        {
+
+            CheckEditText = false;
+
+        }
+        else {
+
+            CheckEditText = true ;
+        }
+
+    }
+    public void UserRegisterFunction(final String F_Name, final String L_Name, final String email, final String password){
+
+        class UserRegisterFunctionClass extends AsyncTask<String,Void,String> {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+
+                progressDialog = ProgressDialog.show(signup.this,"Loading Data",null,true,true);
+            }
+
+            @Override
+            protected void onPostExecute(String httpResponseMsg) {
+
+                super.onPostExecute(httpResponseMsg);
+
+                progressDialog.dismiss();
+
+                Toast.makeText(signup.this,httpResponseMsg.toString(), Toast.LENGTH_LONG).show();
+
+            }
+
+            @Override
+            protected String doInBackground(String... params) {
+
+                hashMap.put("f_name",params[0]);
+
+                hashMap.put("L_name",params[1]);
+
+                hashMap.put("email",params[2]);
+
+                hashMap.put("password",params[3]);
+
+                finalResult = httpParse.postRequest(hashMap, HttpURL);
+
+                return finalResult;
+            }
+        }
+
+        UserRegisterFunctionClass userRegisterFunctionClass = new UserRegisterFunctionClass();
+
+        userRegisterFunctionClass.execute(F_Name,L_Name,email,password);
     }
 
     @Override
@@ -273,4 +333,7 @@ public class signup extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
+
 }

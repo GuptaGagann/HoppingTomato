@@ -33,16 +33,25 @@
             android:paddingHorizontal="8dp"/>
 
         <EditText
-            android:id="@+id/editText8"
+            android:id="@+id/editTextF_Name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Firstname Lastname"
+            android:hint="First Name"
             android:inputType="textPersonName"
             android:selectAllOnFocus="true"
             android:singleLine="true"/>
 
         <EditText
-            android:id="@+id/editText5"
+            android:id="@+id/editTextL_Name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Last Name"
+            android:inputType="textPersonName"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"/>
+
+        <EditText
+            android:id="@+id/editTextEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -52,7 +61,7 @@
             android:singleLine="true"/>
 
         <EditText
-            android:id="@+id/editText6"
+            android:id="@+id/editTextPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Abc@1234"
@@ -60,31 +69,26 @@
             android:selectAllOnFocus="true"
             android:singleLine="true" />
 
-        <EditText
-            android:id="@+id/editText7"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Abc@1234"
-            android:inputType="textPassword"
-            android:selectAllOnFocus="true"
-            android:singleLine="true"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_gravity="center"
+            android:weightSum="3"
             android:layout_marginVertical="@dimen/linear_layout_margin">
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="start"
                 android:background="@android:color/holo_orange_dark"
                 android:text="Customer"
                 android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
                 android:textColor="@android:color/white"
                 android:textSize="20dp"
                 android:textStyle="bold"
+                android:layout_weight="1"
                 android:gravity="center"/>
 
             <Switch
@@ -92,19 +96,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:layout_weight="1"
                 android:paddingHorizontal="5dp"/>
 
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="110dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:background="@android:color/holo_red_dark"
-                android:text="Chef"
                 android:gravity="center"
+                android:text="Chef"
                 android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
                 android:textColor="@android:color/white"
                 android:textSize="20dp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
         </LinearLayout>
 
         <TextView
@@ -208,15 +214,25 @@
             android:justificationMode="inter_word"/>
 
         <Button
-            android:id="@+id/button4"
+            android:id="@+id/Submit"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:background="@android:color/holo_red_dark"
-            android:paddingHorizontal="8dp"
             android:text="Create New Account"
             android:textColor="@android:color/white"
             android:textStyle="bold"
             android:layout_marginVertical="@dimen/linear_layout_margin"/>
+        <Button
+            android:id="@+id/Login"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="@android:color/holo_blue_bright"
+            android:text="Already have an account | Sign In"
+            android:paddingHorizontal="10dp"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:layout_marginVertical="@dimen/linear_layout_margin"/>
+
     </LinearLayout>
 
 </ScrollView>
