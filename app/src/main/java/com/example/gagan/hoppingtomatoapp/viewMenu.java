@@ -15,33 +15,34 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class dashboard_chef extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class viewMenu extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     private RecyclerView mRecyclerView;
     private ArrayList<String> data = new ArrayList<String>();
-    private AddMenuRecyclerViewWithFooterAdapter adapter;
-    Button saveMenu;
+    private ViewMenuRecyclerView adapter;
+
+    Button editMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dashboard_chef);
+        setContentView(R.layout.activity_view_menu);
         //initializeData();
         initializeRecyclerView();
-        saveMenu = findViewById(R.id.saveMenu);
-        saveMenu.setOnClickListener(new View.OnClickListener() {
+        editMenu = findViewById(R.id.editMenu);
+        editMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(dashboard_chef.this, viewMenu.class));
+                startActivity(new Intent(viewMenu.this, dashboard_chef.class));
             }
         });
 
     }
 
     private void initializeRecyclerView() {
-        mRecyclerView = findViewById(R.id.addMenu);
+        mRecyclerView = findViewById(R.id.menuChef);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new AddMenuRecyclerViewWithFooterAdapter(this, data);
+        adapter = new ViewMenuRecyclerView(this, data);
         mRecyclerView.setAdapter(adapter);
     }
 

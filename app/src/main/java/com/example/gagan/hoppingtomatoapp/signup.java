@@ -42,7 +42,7 @@ public class signup extends AppCompatActivity
     EditText First_Name, Last_Name, Email, Password ;
     String F_Name_Holder, L_Name_Holder, EmailHolder, PasswordHolder;
     String finalResult ;
-    String HttpURL = "https://namang344.000webhostapp.com/UserRegistration.php";
+    String HttpURL = "https://swatantranews.info/UserRegistration.php";
     Boolean CheckEditText ;
     ProgressDialog progressDialog;
     HashMap<String,String> hashMap = new HashMap<>();

@@ -9,11 +9,11 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add Menu"/>
+        android:text="Your Menu"/>
 
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/addMenu"
+        android:id="@+id/menuChef"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="10dp"
@@ -25,10 +25,10 @@
     </android.support.v7.widget.RecyclerView>
 
     <Button
-        android:id="@+id/saveMenu"
+        android:id="@+id/editMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Save"/>
+        android:text="Edit Menu"/>
 
 
 </LinearLayout>

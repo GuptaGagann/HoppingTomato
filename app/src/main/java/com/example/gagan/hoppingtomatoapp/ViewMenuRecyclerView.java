@@ -11,14 +11,14 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class RecyclerViewWithFooterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class ViewMenuRecyclerView extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private static final int FOOTER_VIEW = 1;
 
     private ArrayList<String> data; // Take any list that matches your requirement.
     private Context context;
 
     // Define a constructor
-    public RecyclerViewWithFooterAdapter(Context context, ArrayList<String> data) {
+    public ViewMenuRecyclerView(Context context, ArrayList<String> data) {
         this.context = context;
         this.data = data;
     }
@@ -28,29 +28,10 @@ public class RecyclerViewWithFooterAdapter extends RecyclerView.Adapter<Recycler
         public FooterViewHolder(View itemView) {
             super(itemView);
 
-            final EditText menuItemName, menuItemPrice;
-            TextView add_new;
-
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // Do whatever you want on clicking the item
-                }
-            });
-
-            menuItemName=itemView.findViewById(R.id.menuListItem);
-            menuItemPrice=itemView.findViewById(R.id.price);
-            add_new=itemView.findViewById(R.id.add);
-            add_new.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //Toast.makeText(v.getContext(),menuItemName.getText()+" :: "+menuItemPrice.getText(),Toast.LENGTH_LONG).show();
-                    data.add(menuItemName.getText()+" :: "+menuItemPrice.getText());
-                    Toast.makeText(v.getContext(),data.get(getAdapterPosition())+" added!",Toast.LENGTH_LONG).show();
-                    menuItemName.setText(null);
-                    menuItemPrice.setText(null);
-                    notifyDataSetChanged();
-
                 }
             });
         }
@@ -60,22 +41,11 @@ public class RecyclerViewWithFooterAdapter extends RecyclerView.Adapter<Recycler
     public class NormalViewHolder extends ViewHolder {
         public NormalViewHolder(View itemView) {
             super(itemView);
-            TextView menuListItem;
-            TextView delete;
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // Do whatever you want on clicking the normal items
-                }
-            });
-            delete = itemView.findViewById(R.id.delete);
-            menuListItem =itemView.findViewById(R.id.menuListItem);
-            delete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    data.remove(getLayoutPosition());
-                    getItemCount();
-                    notifyDataSetChanged();
                 }
             });
 
@@ -93,12 +63,12 @@ public class RecyclerViewWithFooterAdapter extends RecyclerView.Adapter<Recycler
         View v;
 
         if (viewType == FOOTER_VIEW) {
-            v = LayoutInflater.from(context).inflate(R.layout.add_menu_list_footer, parent, false);
+            v = LayoutInflater.from(context).inflate(R.layout.view_menu_list_footer, parent, false);
             FooterViewHolder vh = new FooterViewHolder(v);
             return vh;
         }
 
-        v = LayoutInflater.from(context).inflate(R.layout.add_menu_list, parent, false);
+        v = LayoutInflater.from(context).inflate(R.layout.view_menu_list, parent, false);
 
         NormalViewHolder vh = new NormalViewHolder(v);
 
@@ -169,13 +139,11 @@ public class RecyclerViewWithFooterAdapter extends RecyclerView.Adapter<Recycler
             TextView menuListItem;
             TextView delete;
             menuListItem = itemView.findViewById(R.id.menuListItem);
-            delete = itemView.findViewById(R.id.delete);
         }
 
         public void bindView(int position) {
             // bindView() method to implement actions
             TextView menuListItem;
-            TextView delete;
             menuListItem = itemView.findViewById(R.id.menuListItem);
             menuListItem.setText(data.get(position));
         }

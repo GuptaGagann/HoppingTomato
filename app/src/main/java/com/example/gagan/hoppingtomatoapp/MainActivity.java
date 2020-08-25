@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity
     ActionBarDrawerToggle toggle;
     String PasswordHolder, EmailHolder;
     String finalResult ;
-    String HttpURL = "https://namang344.000webhostapp.com/UserLogin.php";
+    String HttpURL = "https://hoppingtomato.swatantranews.info/UserLogin.php";
     Boolean CheckEditText ;
     ProgressDialog progressDialog;
     HashMap<String,String> hashMap = new HashMap<>();
@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity
 
                     finish();
 
-                    Intent intent = new Intent(MainActivity.this, Dashboard.class);
+                    Intent intent = new Intent(MainActivity.this, MapsActivity.class);
 
                     intent.putExtra(UserEmail,email);
 
