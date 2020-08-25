@@ -3,37 +3,32 @@ package com.example.gagan.hoppingtomatoapp;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.text.TextUtils;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.regex.Pattern;
 
 public class signup extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -61,20 +56,20 @@ public class signup extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        First_Name = (EditText)findViewById(R.id.editTextF_Name);
-        Last_Name = (EditText)findViewById(R.id.editTextL_Name);
-        Email = (EditText)findViewById(R.id.editTextEmail);
-        Password = (EditText)findViewById(R.id.editTextPassword);
+        First_Name = findViewById(R.id.editTextF_Name);
+        Last_Name = findViewById(R.id.editTextL_Name);
+        Email = findViewById(R.id.editTextEmail);
+        Password = findViewById(R.id.editTextPassword);
 
-        sup=(DrawerLayout)findViewById(R.id.drawer_layout);
-        radioGroup=(RadioGroup)findViewById(R.id.radioGroup1);
+        sup= findViewById(R.id.drawer_layout);
+        radioGroup= findViewById(R.id.radioGroup1);
 
-        register = (Button)findViewById(R.id.Submit);
-        log_in = (Button)findViewById(R.id.Login);
+        register = findViewById(R.id.Submit);
+        log_in = findViewById(R.id.Login);
 
-        final Switch simpleSwitch = (Switch) findViewById(R.id.switch3);
+        final Switch simpleSwitch = findViewById(R.id.switch3);
 
         simpleSwitch.setChecked(false);
         sup.setBackground(getDrawable(R.drawable.dine1));
@@ -85,17 +80,15 @@ public class signup extends AppCompatActivity
         {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) //Line A
             {
-                boolean isOn = ((Switch) simpleSwitch).isChecked();
+                boolean isOn = simpleSwitch.isChecked();
 
-                if (isOn)
-                {
+                if (isOn) {
                     role_flag=1;
                     sup.setBackgroundResource(R.drawable.chef1);
                     sup.getBackground().setAlpha(130);
                     Toast.makeText(signup.this, "Signing up as Chef.", Toast.LENGTH_SHORT).show();
                 }
-                else
-                {
+                else {
                     role_flag=0;
                     sup.setBackground(getDrawable(R.drawable.dine1));
                     sup.getBackground().setAlpha(120);
@@ -106,7 +99,7 @@ public class signup extends AppCompatActivity
         });
 
 
-        date = (TextView) findViewById(R.id.date);
+        date = findViewById(R.id.date);
         // perform click event on edit text
         date.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,26 +132,17 @@ public class signup extends AppCompatActivity
             public void onClick(View view) {
                 // get the selected RadioButton of the group
                 selectedRadioButton  = (RadioButton)findViewById(radioGroup.getCheckedRadioButtonId());
-                //get RadioButton text
-                // display it as Toast to the user
-
                 // Checking whether EditText is Empty or Not
                 CheckEditTextIsEmptyOrNot();
 
-
                 if(CheckEditText){
-
                     // If EditText is not empty and CheckEditText = True then this block will execute.
-                    Toast.makeText(signup.this,role_flag.toString(),Toast.LENGTH_LONG).show();
-
+                    //Toast.makeText(signup.this,role_flag.toString(),Toast.LENGTH_LONG).show();
                     UserRegisterFunction(F_Name_Holder,L_Name_Holder, EmailHolder, PasswordHolder, Role_Flag_Holder,GENDER,DATE);
-
                 }
                 else {
-
                     // If EditText is empty then this block will execute .
                     Toast.makeText(signup.this, "Please fill all form fields.", Toast.LENGTH_LONG).show();
-
                 }
 
 
@@ -175,9 +159,7 @@ public class signup extends AppCompatActivity
             }
         });
 
-
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -186,13 +168,13 @@ public class signup extends AppCompatActivity
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
     public void CheckEditTextIsEmptyOrNot(){
@@ -204,17 +186,12 @@ public class signup extends AppCompatActivity
         Role_Flag_Holder = role_flag.toString();
         GENDER = selectedRadioButton.getText().toString();
         DATE=date.getText().toString();
-        Toast.makeText(signup.this, "Selected Date is:" + DATE , Toast.LENGTH_LONG).show();
 
-
-
-
-
-        if(TextUtils.isEmpty(F_Name_Holder) || TextUtils.isEmpty(L_Name_Holder) || TextUtils.isEmpty(EmailHolder) || TextUtils.isEmpty(PasswordHolder))
-        {
-
+        if(TextUtils.isEmpty(F_Name_Holder) ||
+                TextUtils.isEmpty(L_Name_Holder) ||
+                TextUtils.isEmpty(EmailHolder) ||
+                TextUtils.isEmpty(PasswordHolder)) {
             CheckEditText = false;
-
         }
         else {
 

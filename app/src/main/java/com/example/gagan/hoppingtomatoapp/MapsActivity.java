@@ -4,6 +4,8 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -41,12 +44,17 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.libraries.places.api.net.PlacesClient;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
 public class MapsActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
 
     private GoogleApiClient mGoogleApiClient;
     private int PLACE_PICKER_REQUEST = 1;
-    private TextView tvPlaceDetails;
+    private EditText name, phone, addLine1, addLine2, city_tv, state_tv, country_tv, pin_tv;
     private FloatingActionButton fabPickPlace;
+    Button saveAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,13 +82,28 @@ public class MapsActivity extends AppCompatActivity implements GoogleApiClient.O
                 }
             }
         });
+
+        saveAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MapsActivity.this, VerifyPhone.class));
+            }
+        });
     }
 
     private void initViews() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        fabPickPlace = (FloatingActionButton) findViewById(R.id.fab);
-        tvPlaceDetails = (TextView) findViewById(R.id.placeDetails);
+        fabPickPlace = findViewById(R.id.fab);
+        name = findViewById(R.id.name);
+        phone = findViewById(R.id.phone);
+        addLine1 = findViewById(R.id.addLine1);
+        addLine2 = findViewById(R.id.addLine2);
+        city_tv = findViewById(R.id.city);
+        state_tv  = findViewById(R.id.state);
+        country_tv = findViewById(R.id.country);
+        pin_tv  = findViewById(R.id.pin);
+        saveAddress = findViewById(R.id.saveAddress);
     }
 
     @Override
@@ -122,7 +145,31 @@ public class MapsActivity extends AppCompatActivity implements GoogleApiClient.O
                 stBuilder.append("\n");
                 stBuilder.append("Address: ");
                 stBuilder.append(address);
-                tvPlaceDetails.setText(stBuilder.toString());
+
+                Geocoder geocoder;
+                List<Address> addresses;
+                geocoder = new Geocoder(this, Locale.getDefault());
+
+                try {
+                    addresses = geocoder.getFromLocation(Double.parseDouble((latitude)), Double.parseDouble(longitude), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                    String add = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                    String city = addresses.get(0).getLocality();
+                    String state = addresses.get(0).getAdminArea();
+                    String country = addresses.get(0).getCountryName();
+                    String postalCode = addresses.get(0).getPostalCode();
+                    String knownName = addresses.get(0).getFeatureName();
+
+                    addLine2.setText(add.split(",")[2]);
+                    city_tv.setText(city);
+                    state_tv.setText(state);
+                    country_tv.setText(country);
+                    pin_tv.setText(postalCode);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+
             }
         }
     }
