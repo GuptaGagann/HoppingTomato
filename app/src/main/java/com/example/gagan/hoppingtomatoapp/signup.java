@@ -40,7 +40,7 @@ public class signup extends AppCompatActivity
 
     Button register, log_in;
     EditText First_Name, Last_Name, Email, Password ;
-    String F_Name_Holder, L_Name_Holder, EmailHolder, PasswordHolder;
+    String F_Name_Holder, L_Name_Holder, EmailHolder, PasswordHolder, GENDER,DATE;
     String finalResult ;
     String HttpURL = "https://swatantranews.info/UserRegistration.php";
     Boolean CheckEditText ;
@@ -48,10 +48,6 @@ public class signup extends AppCompatActivity
     HashMap<String,String> hashMap = new HashMap<>();
     HttpParse httpParse = new HttpParse();
     TextView date;
-    String name;
-    String email;
-    String password;
-    String cpassword;
     DrawerLayout sup;
     Integer role_flag=0;
     private String Role_Flag_Holder;
@@ -65,11 +61,15 @@ public class signup extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         First_Name = (EditText)findViewById(R.id.editTextF_Name);
         Last_Name = (EditText)findViewById(R.id.editTextL_Name);
         Email = (EditText)findViewById(R.id.editTextEmail);
         Password = (EditText)findViewById(R.id.editTextPassword);
+
         sup=(DrawerLayout)findViewById(R.id.drawer_layout);
+        radioGroup=(RadioGroup)findViewById(R.id.radioGroup1);
 
         register = (Button)findViewById(R.id.Submit);
         log_in = (Button)findViewById(R.id.Login);
@@ -137,6 +137,10 @@ public class signup extends AppCompatActivity
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // get the selected RadioButton of the group
+                selectedRadioButton  = (RadioButton)findViewById(radioGroup.getCheckedRadioButtonId());
+                //get RadioButton text
+                // display it as Toast to the user
 
                 // Checking whether EditText is Empty or Not
                 CheckEditTextIsEmptyOrNot();
@@ -147,7 +151,7 @@ public class signup extends AppCompatActivity
                     // If EditText is not empty and CheckEditText = True then this block will execute.
                     Toast.makeText(signup.this,role_flag.toString(),Toast.LENGTH_LONG).show();
 
-                    UserRegisterFunction(F_Name_Holder,L_Name_Holder, EmailHolder, PasswordHolder);
+                    UserRegisterFunction(F_Name_Holder,L_Name_Holder, EmailHolder, PasswordHolder, Role_Flag_Holder,GENDER,DATE);
 
                 }
                 else {
@@ -172,8 +176,6 @@ public class signup extends AppCompatActivity
         });
 
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -200,6 +202,12 @@ public class signup extends AppCompatActivity
         EmailHolder = Email.getText().toString();
         PasswordHolder = Password.getText().toString();
         Role_Flag_Holder = role_flag.toString();
+        GENDER = selectedRadioButton.getText().toString();
+        DATE=date.getText().toString();
+        Toast.makeText(signup.this, "Selected Date is:" + DATE , Toast.LENGTH_LONG).show();
+
+
+
 
 
         if(TextUtils.isEmpty(F_Name_Holder) || TextUtils.isEmpty(L_Name_Holder) || TextUtils.isEmpty(EmailHolder) || TextUtils.isEmpty(PasswordHolder))
@@ -214,7 +222,7 @@ public class signup extends AppCompatActivity
         }
 
     }
-    public void UserRegisterFunction(final String F_Name, final String L_Name, final String email, final String password){
+    public void UserRegisterFunction(final String F_Name, final String L_Name, final String email, final String password, final String Role, final String Gender, final String Date){
 
         class UserRegisterFunctionClass extends AsyncTask<String,Void,String> {
 
@@ -247,6 +255,13 @@ public class signup extends AppCompatActivity
 
                 hashMap.put("password",params[3]);
 
+                hashMap.put("role",params[4]);
+
+                hashMap.put("gender",params[5]);
+
+                hashMap.put("date",params[6]);
+
+
                 finalResult = httpParse.postRequest(hashMap, HttpURL);
 
                 return finalResult;
@@ -255,9 +270,12 @@ public class signup extends AppCompatActivity
 
         UserRegisterFunctionClass userRegisterFunctionClass = new UserRegisterFunctionClass();
 
-        userRegisterFunctionClass.execute(F_Name,L_Name,email,password);
+        userRegisterFunctionClass.execute(F_Name,L_Name,email,password,Role,Gender,Date);
     }
 
+
+
+    //Additional
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
