@@ -131,29 +131,18 @@
             android:orientation="horizontal"
             android:layout_gravity="center"
             android:layout_margin="@dimen/linear_layout_margin">
-            <Spinner
-                android:id="@+id/spinner"
+            <TextView
+                android:id="@+id/date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="Date"
-                android:tag="Date"
-                tools:contentDescription="Date" />
+                android:layout_centerHorizontal="true"
+                android:background="@android:color/transparent"
+                android:hint="dd/mm/yyyy"
+                android:padding="15dp"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white"
+                android:textSize="20sp" />
 
-            <Spinner
-                android:id="@+id/spinner1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="Month"
-                android:tag="Month"
-                tools:contentDescription="Month" />
-
-            <Spinner
-                android:id="@+id/spinner2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="Year"
-                android:tag="Year"
-                tools:contentDescription="Year" />
         </LinearLayout>
 
         <LinearLayout
@@ -193,6 +182,17 @@
                     android:focusable="auto"
                     android:textSize="18dp"
                     android:text="Female" />
+
+                <RadioButton
+                    android:id="@+id/radio2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:focusable="auto"
+                    android:textSize="18dp"
+                    android:text="Other" />
+
+
             </RadioGroup>
 
         </LinearLayout>
@@ -217,7 +217,7 @@
             android:id="@+id/Submit"
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:background="@android:color/holo_red_dark"
+            android:background="@android:color/holo_orange_dark"
             android:text="Create New Account"
             android:textColor="@android:color/white"
             android:textStyle="bold"
@@ -226,7 +226,7 @@
             android:id="@+id/Login"
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:background="@android:color/holo_blue_bright"
+            android:background="@android:color/holo_red_dark"
             android:text="Already have an account | Sign In"
             android:paddingHorizontal="10dp"
             android:textColor="@android:color/white"

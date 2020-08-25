@@ -1,5 +1,6 @@
 package com.example.gagan.hoppingtomatoapp;
 
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -21,12 +22,16 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
@@ -42,13 +47,18 @@ public class signup extends AppCompatActivity
     ProgressDialog progressDialog;
     HashMap<String,String> hashMap = new HashMap<>();
     HttpParse httpParse = new HttpParse();
-    Spinner dd,mm,yy;
-    String date,year,month, name,email,password,cpassword;
-    ArrayAdapter<String> a;
-    String d[]={"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31"};
-    String m[]={"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
-    String y[]={"1980","1981","1982","1983","1984","1985","1986","1987","1988","1989","1990","1991","1992","1993","1994","1995","1996","1997","1998","1999","2000","2001","2002","2003","2004","2005","2006","2007","2008","2009","2010"};
+    TextView date;
+    String name;
+    String email;
+    String password;
+    String cpassword;
     DrawerLayout sup;
+    Integer role_flag=0;
+    private String Role_Flag_Holder;
+    private DatePickerDialog datePickerDialog;
+
+    RadioGroup radioGroup;
+    RadioButton selectedRadioButton;
 
 
     @Override
@@ -69,6 +79,7 @@ public class signup extends AppCompatActivity
         simpleSwitch.setChecked(false);
         sup.setBackground(getDrawable(R.drawable.dine1));
         sup.getBackground().setAlpha(120);
+        role_flag=0;
 
         simpleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
         {
@@ -78,12 +89,14 @@ public class signup extends AppCompatActivity
 
                 if (isOn)
                 {
+                    role_flag=1;
                     sup.setBackgroundResource(R.drawable.chef1);
                     sup.getBackground().setAlpha(130);
                     Toast.makeText(signup.this, "Signing up as Chef.", Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
+                    role_flag=0;
                     sup.setBackground(getDrawable(R.drawable.dine1));
                     sup.getBackground().setAlpha(120);
                     Toast.makeText(signup.this, "Signing up as Customer.", Toast.LENGTH_SHORT).show();
@@ -91,59 +104,32 @@ public class signup extends AppCompatActivity
 
             }
         });
-        dd=(Spinner)findViewById(R.id.spinner);
-        mm=(Spinner)findViewById(R.id.spinner1);
-        yy=(Spinner)findViewById(R.id.spinner2);
 
-        a=new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, d);
-        dd.setAdapter(a);
-        dd.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
+        date = (TextView) findViewById(R.id.date);
+        // perform click event on edit text
+        date.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> arg0, View arg1,
-                                       int arg2, long arg3) {
-                // TODO Auto-generated method stub
-                date=arg0.getItemAtPosition(arg2).toString();
-            }
+            public void onClick(View v) {
+                // calender class's instance and get current date , month and year from calender
+                final Calendar c = Calendar.getInstance();
+                int mYear = c.get(Calendar.YEAR); // current year
+                int mMonth = c.get(Calendar.MONTH); // current month
+                int mDay = c.get(Calendar.DAY_OF_MONTH); // current day
+                // date picker dialog
+                datePickerDialog = new DatePickerDialog(signup.this,
+                        new DatePickerDialog.OnDateSetListener() {
 
-            @Override
-            public void onNothingSelected(AdapterView<?> arg0) {
-                // TODO Auto-generated method stub
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+                                // set day of month , month and year value in the edit text
+                                date.setText(dayOfMonth + "/"
+                                        + (monthOfYear + 1) + "/" + year);
 
-            }
-        });
-        a=new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, m);
-        mm.setAdapter(a);
-        mm.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected(AdapterView<?> arg0, View arg1,
-                                       int arg2, long arg3) {
-                // TODO Auto-generated method stub
-                month=arg0.getItemAtPosition(arg2).toString();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> arg0) {
-                // TODO Auto-generated method stub
-
-            }
-        });
-        a=new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, y);
-        yy.setAdapter(a);
-        yy.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected(AdapterView<?> arg0, View arg1,
-                                       int arg2, long arg3) {
-                // TODO Auto-generated method stub
-                year=arg0.getItemAtPosition(arg2).toString();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> arg0) {
-                // TODO Auto-generated method stub
-
+                            }
+                        }, mYear, mMonth, mDay);
+                datePickerDialog.show();
             }
         });
 
@@ -155,9 +141,11 @@ public class signup extends AppCompatActivity
                 // Checking whether EditText is Empty or Not
                 CheckEditTextIsEmptyOrNot();
 
+
                 if(CheckEditText){
 
                     // If EditText is not empty and CheckEditText = True then this block will execute.
+                    Toast.makeText(signup.this,role_flag.toString(),Toast.LENGTH_LONG).show();
 
                     UserRegisterFunction(F_Name_Holder,L_Name_Holder, EmailHolder, PasswordHolder);
 
@@ -211,6 +199,7 @@ public class signup extends AppCompatActivity
         L_Name_Holder = Last_Name.getText().toString();
         EmailHolder = Email.getText().toString();
         PasswordHolder = Password.getText().toString();
+        Role_Flag_Holder = role_flag.toString();
 
 
         if(TextUtils.isEmpty(F_Name_Holder) || TextUtils.isEmpty(L_Name_Holder) || TextUtils.isEmpty(EmailHolder) || TextUtils.isEmpty(PasswordHolder))
