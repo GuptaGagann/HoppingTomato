@@ -2,17 +2,20 @@ package com.example.gagan.hoppingtomatoapp;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -45,6 +48,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.libraries.places.api.net.PlacesClient;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -55,13 +59,27 @@ public class MapsActivity extends AppCompatActivity implements GoogleApiClient.O
     private EditText name, phone, addLine1, addLine2, city_tv, state_tv, country_tv, pin_tv;
     private FloatingActionButton fabPickPlace;
     Button saveAddress;
+    String HttpURL = "https://hoppingtomato.swatantranews.info/addSave.php";
+    HashMap<String,String> hashMap = new HashMap<>();
+    HttpParse httpParse = new HttpParse();
+    String NAME, PHONE,ADD1,ADD2,CITY,STATE,COUNTRY,PIN;
+    Boolean CheckEditText ;
+    ProgressDialog progressDialog;
+    String finalResult ;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
+
+
         initViews();
+
+
 
         mGoogleApiClient = new GoogleApiClient
                 .Builder(this)
@@ -86,10 +104,97 @@ public class MapsActivity extends AppCompatActivity implements GoogleApiClient.O
         saveAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                CheckEditTextIsEmptyOrNot();
+                String address = NAME+","+PHONE+","+ADD1+","+ADD2+","+ CITY+","+ STATE+"," +COUNTRY+","+ COUNTRY;
+                String email = getIntent().getStringExtra("email");
+                Toast.makeText(getApplicationContext(),email,Toast.LENGTH_SHORT).show();
+
+                String addRegistered = "1";
+                Toast.makeText(getApplicationContext(),address,Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(MapsActivity.this, VerifyPhone.class).putExtra("phone",phone.getText().toString()));
+
+                if(CheckEditText){
+
+                    addressSave(address, email,addRegistered);
+
+                }
+                else {
+
+                    Toast.makeText(MapsActivity.this, "Please fill all form fields.", Toast.LENGTH_LONG).show();
+
+                }
+
             }
         });
     }
+    public void CheckEditTextIsEmptyOrNot(){
+
+        NAME = name.getText().toString();
+        PHONE=phone.getText().toString();
+        ADD1=addLine1.getText().toString();
+        ADD2=addLine2.getText().toString();
+        CITY=city_tv.getText().toString();
+        STATE=state_tv.getText().toString();
+        COUNTRY=country_tv.getText().toString();
+        PIN=pin_tv.getText().toString();
+
+
+        if(TextUtils.isEmpty(NAME) || TextUtils.isEmpty(PHONE)|| TextUtils.isEmpty(ADD1)|| TextUtils.isEmpty(ADD2)|| TextUtils.isEmpty(CITY)|| TextUtils.isEmpty(STATE)|| TextUtils.isEmpty(COUNTRY)|| TextUtils.isEmpty(PIN))
+
+        {
+            CheckEditText = false;
+
+        }
+        else {
+
+            CheckEditText = true ;
+        }
+    }
+
+    public void addressSave(final String ADDRESS, final String EMAIL, final String ADDREG ){
+
+        class addressSaveClass extends AsyncTask<String,Void,String> {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+
+                progressDialog = ProgressDialog.show(MapsActivity.this,"Loading Data","Loading...",true,true);
+            }
+
+            @Override
+            protected void onPostExecute(String httpResponseMsg) {
+
+                super.onPostExecute(httpResponseMsg);
+
+                progressDialog.dismiss();
+
+                Toast.makeText(MapsActivity.this,httpResponseMsg.toString(), Toast.LENGTH_LONG).show();
+
+            }
+
+            @Override
+            protected String doInBackground(String... params) {
+
+                hashMap.put("addr",params[0]);
+
+                hashMap.put("emaill",params[1]);
+
+                hashMap.put("addreg",params[2]);
+
+
+
+                finalResult = httpParse.postRequest(hashMap, HttpURL);
+
+                return finalResult;
+            }
+        }
+
+        addressSaveClass addressSaveClass = new addressSaveClass();
+
+        addressSaveClass.execute(ADDRESS,EMAIL,ADDREG);
+    }
+
 
     private void initViews() {
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -159,7 +264,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleApiClient.O
                     String postalCode = addresses.get(0).getPostalCode();
                     String knownName = addresses.get(0).getFeatureName();
 
-                    addLine2.setText(add.split(",")[2]);
                     city_tv.setText(city);
                     state_tv.setText(state);
                     country_tv.setText(country);

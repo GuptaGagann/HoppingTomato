@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity
 
                     Intent intent = new Intent(MainActivity.this, MapsActivity.class);
 
-                    intent.putExtra(UserEmail,email);
+                    intent.putExtra("email",email);
 
                     startActivity(intent);
 
