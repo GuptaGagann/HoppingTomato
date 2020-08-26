@@ -86,7 +86,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleApiClient.O
         saveAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MapsActivity.this, VerifyPhone.class));
+                startActivity(new Intent(MapsActivity.this, VerifyPhone.class).putExtra("phone",phone.getText().toString()));
             }
         });
     }

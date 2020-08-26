@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Provide your full address"
-        android:layout_margin="5dp"
+        android:layout_margin="@dimen/linear_layout_margin"
         android:textSize="20dp"
         android:textStyle="bold"/>
 
@@ -24,14 +24,14 @@
         android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_margin="@dimen/linear_layout_margin"
         android:hint="Full name"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_margin="5dp">
+        android:layout_margin="@dimen/linear_layout_margin">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -51,42 +51,42 @@
         android:id="@+id/addLine1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_margin="@dimen/linear_layout_margin"
         android:hint="AddressLine1"/>
 
     <EditText
         android:id="@+id/addLine2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_margin="@dimen/linear_layout_margin"
         android:hint="AddressLine2"/>
 
     <EditText
         android:id="@+id/city"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_margin="@dimen/linear_layout_margin"
         android:hint="Town/City"/>
 
     <EditText
         android:id="@+id/state"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_margin="@dimen/linear_layout_margin"
         android:hint="State"/>
 
     <EditText
         android:id="@+id/country"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_margin="@dimen/linear_layout_margin"
         android:hint="Country"/>
 
     <EditText
         android:id="@+id/pin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_margin="@dimen/linear_layout_margin"
         android:hint="PIN code"/>
 
     <Button

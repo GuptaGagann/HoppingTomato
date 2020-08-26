@@ -209,7 +209,7 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.test_activity_ref) {
-            Intent i = new Intent(MainActivity.this,dashboard_chef.class);
+            Intent i = new Intent(MainActivity.this,DashboardChef.class);
             startActivity(i);
             return true;
         }

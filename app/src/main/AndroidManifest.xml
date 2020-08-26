@@ -11,10 +11,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".VerifyPhone"></activity>
+        <activity android:name=".DashboardCustomer"/>
+        <activity android:name=".VerifyPhone" />
         <activity android:name=".MapsActivity" />
-        <activity android:name=".dashboard_chef" />
-        <activity android:name=".viewMenu" />
+        <activity android:name=".DashboardChef" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
