@@ -48,6 +48,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.libraries.places.api.net.PlacesClient;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -56,7 +57,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleApiClient.O
 
     private GoogleApiClient mGoogleApiClient;
     private int PLACE_PICKER_REQUEST = 1;
-    private EditText name, phone, addLine1, addLine2, city_tv, state_tv, country_tv, pin_tv;
+    TextView hello;
+    private EditText name_tv, phone, addLine1, addLine2, city_tv, state_tv, country_tv, pin_tv;
     private FloatingActionButton fabPickPlace;
     Button saveAddress;
     String HttpURL = "https://hoppingtomato.swatantranews.info/addSave.php";
@@ -66,20 +68,16 @@ public class MapsActivity extends AppCompatActivity implements GoogleApiClient.O
     Boolean CheckEditText ;
     ProgressDialog progressDialog;
     String finalResult ;
+    String regDetails;
 
-
-
+    String name,email,roleFlag,dob,gender,address,addressFlag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-
-
         initViews();
-
-
 
         mGoogleApiClient = new GoogleApiClient
                 .Builder(this)
@@ -101,21 +99,30 @@ public class MapsActivity extends AppCompatActivity implements GoogleApiClient.O
             }
         });
 
+        name = getIntent().getStringExtra("name");
+        email = getIntent().getStringExtra("email");
+        roleFlag = getIntent().getStringExtra("roleFlag");
+        dob = getIntent().getStringExtra("dob");
+        gender = getIntent().getStringExtra("gender");
+        address = getIntent().getStringExtra("address");
+        addressFlag = getIntent().getStringExtra("addressFlag");
+
+        hello = findViewById(R.id.hello);
+        hello.setText("Hello, "+name);
+
         saveAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 CheckEditTextIsEmptyOrNot();
                 String address = NAME+","+PHONE+","+ADD1+","+ADD2+","+ CITY+","+ STATE+"," +COUNTRY+","+ COUNTRY;
-                String email = getIntent().getStringExtra("email");
-                Toast.makeText(getApplicationContext(),email,Toast.LENGTH_SHORT).show();
+                email = getIntent().getStringExtra("email");
 
                 String addRegistered = "1";
-                Toast.makeText(getApplicationContext(),address,Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(MapsActivity.this, VerifyPhone.class).putExtra("phone",phone.getText().toString()));
 
                 if(CheckEditText){
 
                     addressSave(address, email,addRegistered);
+                    Toast.makeText(getApplicationContext(),address,Toast.LENGTH_SHORT).show();
 
                 }
                 else {
@@ -129,7 +136,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleApiClient.O
     }
     public void CheckEditTextIsEmptyOrNot(){
 
-        NAME = name.getText().toString();
+        NAME = name_tv.getText().toString();
         PHONE=phone.getText().toString();
         ADD1=addLine1.getText().toString();
         ADD2=addLine2.getText().toString();
@@ -169,7 +176,19 @@ public class MapsActivity extends AppCompatActivity implements GoogleApiClient.O
 
                 progressDialog.dismiss();
 
-                Toast.makeText(MapsActivity.this,httpResponseMsg.toString(), Toast.LENGTH_LONG).show();
+                regDetails = httpResponseMsg;
+
+                startActivity(new Intent(MapsActivity.this, VerifyPhone.class)
+                        .putExtra("name",name)
+                        .putExtra("email",email)
+                        .putExtra("roleFlag",roleFlag)
+                        .putExtra("dob",dob)
+                        .putExtra("gender",gender)
+                        .putExtra("address",address)
+                        .putExtra("addressFlag",addressFlag)
+                        .putExtra("phone",phone.getText().toString()));
+
+                Toast.makeText(MapsActivity.this,regDetails, Toast.LENGTH_LONG).show();
 
             }
 
@@ -181,8 +200,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleApiClient.O
                 hashMap.put("emaill",params[1]);
 
                 hashMap.put("addreg",params[2]);
-
-
 
                 finalResult = httpParse.postRequest(hashMap, HttpURL);
 
@@ -200,7 +217,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleApiClient.O
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         fabPickPlace = findViewById(R.id.fab);
-        name = findViewById(R.id.name);
+        name_tv = findViewById(R.id.name);
         phone = findViewById(R.id.phone);
         addLine1 = findViewById(R.id.addLine1);
         addLine2 = findViewById(R.id.addLine2);

@@ -16,7 +16,7 @@ echo "Connected successfully";
 $users = array(); 
 
 //this is our sql query 
-$sql = "SELECT id, first_name, last_name, user_email, role, dob, Gender FROM user;";
+$sql = "SELECT id, first_name, last_name, user_email, role, dob, Gender, address,addRegistered FROM user;";
 
 //creating an statment with the query
 $stmt = $conn->prepare($sql);
@@ -25,7 +25,7 @@ $stmt = $conn->prepare($sql);
 $stmt->execute();
 
 //binding results for that statment 
-$stmt->bind_result($id, $first_name, $last_name, $user_email, $role, $dob, $Gender);
+$stmt->bind_result($id, $first_name, $last_name, $user_email, $role, $dob, $Gender, $address, $addRegistered);
 
 //looping through all the records
 while($stmt->fetch()){
@@ -39,6 +39,8 @@ while($stmt->fetch()){
 		'role'=>$role,
 		'dob'=>$dob,
 		'Gender'=>$Gender,
+		'address'=>$address,
+		'addRegistered'=>$addRegistered,
 		
 	
 	

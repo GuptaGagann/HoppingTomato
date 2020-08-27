@@ -13,6 +13,14 @@
     tools:showIn="@layout/activity_maps">
 
     <TextView
+        android:id="@+id/hello"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/linear_layout_margin"
+        android:textSize="20dp"
+        android:textStyle="bold"/>
+
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Provide your full address"
@@ -87,7 +95,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/linear_layout_margin"
-        android:hint="PIN code"/>
+        android:hint="PIN code"
+        android:inputType="number"
+        android:maxLength="6"/>
 
     <Button
         android:id="@+id/saveAddress"

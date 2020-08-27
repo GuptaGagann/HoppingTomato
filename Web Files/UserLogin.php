@@ -15,14 +15,56 @@
  
  if(isset($check)){
  
- echo "Data Matched";
+ $users = array(); 
+
+//this is our sql query 
+$sql = "SELECT id, first_name, last_name, user_email, role, dob, Gender, address,addRegistered FROM user where user_email = '$email';";
+
+//creating an statment with the query
+$stmt = $con->prepare($sql);
+
+//executing that statment
+$stmt->execute();
+
+//binding results for that statment 
+$stmt->bind_result($id, $first_name, $last_name, $user_email, $role, $dob, $Gender, $address, $addRegistered);
+
+//looping through all the records
+while($stmt->fetch()){
+	
+	//pushing fetched data in an array 
+	$temp = [
+		'id'=>$id,
+		'fname'=>$first_name,
+		'lname'=>$last_name,
+		'uemail'=>$user_email,
+		'role'=>$role,
+		'dob'=>$dob,
+		'Gender'=>$Gender,
+		'address'=>$address,
+		'addRegistered'=>$addRegistered,
+		
+	
+	
+	];
+	
+	//pushing the array inside the hero array 
+	array_push($users, $temp);
+}
+
+//displaying the data in json format 
+echo json_encode($users);
+
+
+ 
+ 
  }
  else{
- echo "Invalid Username or Password Please Try Again";
+ echo "Email not registered or password incorrect! Try again.";
  }
  
  }else{
- echo "Check Again";
+ echo "Check Again.";
  }
 mysqli_close($con);
 

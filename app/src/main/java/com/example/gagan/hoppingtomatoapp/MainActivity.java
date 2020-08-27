@@ -17,10 +17,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -43,6 +52,8 @@ public class MainActivity extends AppCompatActivity
     HashMap<String,String> hashMap = new HashMap<>();
     HttpParse httpParse = new HttpParse();
     public static final String UserEmail = "";
+
+    String firstname,lastname,registeredEmail,roleFlag,dob,gender,address,addressFlag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +89,7 @@ public class MainActivity extends AppCompatActivity
                 }
                 else {
 
-                    Toast.makeText(MainActivity.this, "Please fill all form fields.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, "Please fill all the form fields.", Toast.LENGTH_LONG).show();
 
                 }
 
@@ -147,22 +158,17 @@ public class MainActivity extends AppCompatActivity
 
                 progressDialog.dismiss();
 
-                if(httpResponseMsg.equalsIgnoreCase("Data Matched")){
-
-                    finish();
-
-                    Intent intent = new Intent(MainActivity.this, MapsActivity.class);
-
-                    intent.putExtra("email",email);
-
-                    startActivity(intent);
-
-                }
-                else{
-
+                if(httpResponseMsg.toString().equals("Email not registered or password incorrect! Try again.")
+                        ||httpResponseMsg.toString().equals("Check Again.")){
                     Toast.makeText(MainActivity.this,httpResponseMsg,Toast.LENGTH_LONG).show();
                 }
-
+                else {
+                    try {
+                        loadIntoListView(httpResponseMsg);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
 
             @Override
@@ -181,6 +187,53 @@ public class MainActivity extends AppCompatActivity
         UserLoginClass userLoginClass = new UserLoginClass();
 
         userLoginClass.execute(email,password);
+    }
+
+    private void loadIntoListView(String json) throws JSONException {
+        JSONArray jsonArray = new JSONArray(json);
+        firstname = jsonArray.getJSONObject(0).getString("fname");
+        lastname = jsonArray.getJSONObject(0).getString("lname");
+        registeredEmail = jsonArray.getJSONObject(0).getString("uemail");
+        roleFlag = jsonArray.getJSONObject(0).getString("role");
+        dob = jsonArray.getJSONObject(0).getString("dob");
+        gender = jsonArray.getJSONObject(0).getString("Gender");
+        address = jsonArray.getJSONObject(0).getString("address");
+        addressFlag = jsonArray.getJSONObject(0).getString("addRegistered");
+
+        email = Email.getText().toString();
+        if(registeredEmail.equals(email)){
+
+            //Toast.makeText(MainActivity.this,addressFlag,Toast.LENGTH_LONG).show();
+            Intent intent = new Intent();
+            finish();
+
+            if(Integer.parseInt(addressFlag) != 1){
+                intent = new Intent(MainActivity.this, MapsActivity.class);
+            }
+
+            else {
+                if(Integer.parseInt(roleFlag)==1){
+                    intent = new Intent(MainActivity.this, DashboardChef.class);
+                }
+                else if(Integer.parseInt(roleFlag)==0){
+                    intent = new Intent(MainActivity.this, DashboardCustomer.class);
+                }
+            }
+            intent.putExtra("name",firstname+" "+lastname)
+                    .putExtra("email",registeredEmail)
+                    .putExtra("roleFlag",roleFlag)
+                    .putExtra("dob",dob)
+                    .putExtra("gender",gender)
+                    .putExtra("address",address)
+                    .putExtra("addressFlag",addressFlag);
+
+            startActivity(intent);
+
+        }
+        else{
+            Toast.makeText(MainActivity.this,"Email not registered or password incorrect! Try again.",Toast.LENGTH_LONG).show();
+        }
+
     }
 
     @Override

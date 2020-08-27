@@ -27,10 +27,25 @@ public class DashboardChef extends AppCompatActivity implements NavigationView.O
     TabLayout tabLayout;
     ViewPager viewPager;
 
+    TextView helloChef;
+
+    String name,email,roleFlag,dob,gender,address,addressFlag;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard_chef);
+
+        name = getIntent().getStringExtra("name");
+        email = getIntent().getStringExtra("email");
+        roleFlag = getIntent().getStringExtra("roleFlag");
+        dob = getIntent().getStringExtra("dob");
+        gender = getIntent().getStringExtra("gender");
+        address = getIntent().getStringExtra("address");
+        addressFlag = getIntent().getStringExtra("addressFlag");
+
+        helloChef = findViewById(R.id.helloChef);
+        helloChef.setText("Hello Chef, "+name);
 
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
