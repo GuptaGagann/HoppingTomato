@@ -55,17 +55,20 @@ public class MainActivity extends AppCompatActivity
 
     String firstname,lastname,registeredEmail,roleFlag,dob,gender,address,addressFlag;
 
+    private static long back_pressed;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+
         Email = (EditText)findViewById(R.id.email);
         Password = (EditText)findViewById(R.id.password);
         LogIn = (Button)findViewById(R.id.Login);
 
-        mDrawerLayout = findViewById(R.id.drawer_layout);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -241,7 +244,13 @@ public class MainActivity extends AppCompatActivity
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if (back_pressed + 2000 > System.currentTimeMillis()) {
+                super.onBackPressed();
+            } else {
+                Toast.makeText(getBaseContext(), "Back once again to exit the app!",
+                        Toast.LENGTH_SHORT).show();
+                back_pressed = System.currentTimeMillis();
+            }
         }
     }
 

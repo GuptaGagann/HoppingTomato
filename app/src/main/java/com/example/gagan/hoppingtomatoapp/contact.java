@@ -18,12 +18,16 @@ import android.view.MenuItem;
 public class contact extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    String roleFlag;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        roleFlag = getIntent().getStringExtra("roleFlag");
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -81,13 +85,22 @@ public class contact extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         if (id == R.id.nav_home) {
-            Intent i = new Intent(contact.this, MainActivity.class);
+            Intent i = new Intent();
+            if(roleFlag == null){
+                i = new Intent(this, MainActivity.class).putExtra("roleFlag",roleFlag);
+            }
+            else if(Integer.parseInt(roleFlag) == 1){
+                i = new Intent(this, DashboardChef.class).putExtra("roleFlag",roleFlag);
+            }
+            else if(Integer.parseInt(roleFlag) ==0){
+                i = new Intent(this, DashboardCustomer.class).putExtra("roleFlag",roleFlag);
+            }
             startActivity(i);
         } else if (id == R.id.nav_faq) {
-            Intent i = new Intent(contact.this, faq.class);
+            Intent i = new Intent(contact.this, faq.class).putExtra("roleFlag",roleFlag);
             startActivity(i);
         } else if (id == R.id.nav_about) {
-            Intent i = new Intent(contact.this, about.class);
+            Intent i = new Intent(contact.this, about.class).putExtra("roleFlag",roleFlag);
             startActivity(i);
         } else if (id == R.id.nav_contact) {
 

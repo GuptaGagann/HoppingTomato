@@ -23,12 +23,16 @@ public class about extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     TextView tt;
 
+    String roleFlag;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        roleFlag = getIntent().getStringExtra("roleFlag");
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -85,15 +89,24 @@ public class about extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            Intent i = new Intent(about.this, MainActivity.class);
+            Intent i = new Intent();
+            if(roleFlag == null){
+                i = new Intent(this, MainActivity.class).putExtra("roleFlag",roleFlag);
+            }
+            else if(Integer.parseInt(roleFlag) == 1){
+                i = new Intent(this, DashboardChef.class).putExtra("roleFlag",roleFlag);
+            }
+            else if(Integer.parseInt(roleFlag) ==0){
+                i = new Intent(this, DashboardCustomer.class).putExtra("roleFlag",roleFlag);
+            }
             startActivity(i);
         } else if (id == R.id.nav_faq) {
-            Intent i = new Intent(about.this, faq.class);
+            Intent i = new Intent(about.this, faq.class).putExtra("roleFlag",roleFlag);
             startActivity(i);
         } else if (id == R.id.nav_about) {
 
         } else if (id == R.id.nav_contact) {
-            Intent i = new Intent(about.this, contact.class);
+            Intent i = new Intent(about.this, contact.class).putExtra("roleFlag",roleFlag);
             startActivity(i);
         } else if (id == R.id.nav_social) {
 

@@ -142,7 +142,7 @@ public class signup extends AppCompatActivity
                 }
                 else {
                     // If EditText is empty then this block will execute .
-                    Toast.makeText(signup.this, "Please fill all form fields.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(signup.this, "Please fill all form fields.", Toast.LENGTH_SHORT).show();
                 }
 
 

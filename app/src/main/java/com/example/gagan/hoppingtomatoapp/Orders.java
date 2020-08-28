@@ -62,18 +62,9 @@ public class Orders extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_add_menu,container,false);
-        helloChef = view.findViewById(R.id.helloChef);
-        helloChef.setText("Hello Chef");
+        View view = inflater.inflate(R.layout.fragment_orders,container,false);
         viewPager = getActivity().findViewById(R.id.viewPager);
         // bind your data here.]
-        helloChef.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                viewPager.setCurrentItem(1);
-            }
-        });
         return view;
     }
 }

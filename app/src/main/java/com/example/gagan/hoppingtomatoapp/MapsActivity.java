@@ -288,9 +288,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleApiClient.O
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
-
-
             }
         }
     }
