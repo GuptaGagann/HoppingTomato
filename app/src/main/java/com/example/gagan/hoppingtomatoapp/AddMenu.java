@@ -9,6 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -30,6 +34,7 @@ public class AddMenu extends Fragment {
 
     private RecyclerView mRecyclerView;
     private ArrayList<String> data = new ArrayList<String>();
+    private ArrayList<Float> price = new ArrayList<Float>();
     private AddMenuRecyclerViewWithFooterAdapter adapter;
     Button saveMenu;
 
@@ -79,7 +84,22 @@ public class AddMenu extends Fragment {
         saveMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int count=mRecyclerView.getAdapter().getItemCount();
+                String itemsName = "";
+                String prices = "";
+                for(int i=0; i<count; i++) {
+                    View itemView = mRecyclerView.findViewHolderForAdapterPosition(0).itemView;
+                    TextView itemName = itemView.findViewById(R.id.menuListItem);
+                    itemsName += itemName.getText()+",";
+                }
 
+                for(int i=0; i<count; i++) {
+                    View itemView = mRecyclerView.findViewHolderForAdapterPosition(0).itemView;
+                    TextView price = itemView.findViewById(R.id.price);
+                    prices += price.getText()+",";
+                }
+                Toast.makeText(getContext(),itemsName,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),prices,Toast.LENGTH_SHORT).show();
                 viewPager.setCurrentItem(1);
             }
         });
@@ -88,7 +108,7 @@ public class AddMenu extends Fragment {
 
     private void initializeRecyclerView() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new AddMenuRecyclerViewWithFooterAdapter(getContext(), data);
+        adapter = new AddMenuRecyclerViewWithFooterAdapter(getContext(), data, price);
         mRecyclerView.setAdapter(adapter);
     }
 

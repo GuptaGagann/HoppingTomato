@@ -15,12 +15,14 @@ public class AddMenuRecyclerViewWithFooterAdapter extends RecyclerView.Adapter<R
     private static final int FOOTER_VIEW = 1;
 
     private ArrayList<String> data; // Take any list that matches your requirement.
+    private ArrayList<Float> price;
     private Context context;
 
     // Define a constructor
-    public AddMenuRecyclerViewWithFooterAdapter(Context context, ArrayList<String> data) {
+    public AddMenuRecyclerViewWithFooterAdapter(Context context, ArrayList<String> data, ArrayList<Float> price) {
         this.context = context;
         this.data = data;
+        this.price = price;
     }
 
     // Define a ViewHolder for Footer view
@@ -45,7 +47,8 @@ public class AddMenuRecyclerViewWithFooterAdapter extends RecyclerView.Adapter<R
                 @Override
                 public void onClick(View v) {
                     //Toast.makeText(v.getContext(),menuItemName.getText()+" :: "+menuItemPrice.getText(),Toast.LENGTH_LONG).show();
-                    data.add(menuItemName.getText()+" :: "+menuItemPrice.getText());
+                    data.add(menuItemName.getText().toString());
+                    price.add(Float.parseFloat(menuItemPrice.getText().toString()));
                     Toast.makeText(v.getContext(),data.get(getAdapterPosition())+" added!",Toast.LENGTH_LONG).show();
                     menuItemName.setText(null);
                     menuItemPrice.setText(null);
@@ -74,6 +77,7 @@ public class AddMenuRecyclerViewWithFooterAdapter extends RecyclerView.Adapter<R
                 @Override
                 public void onClick(View v) {
                     data.remove(getLayoutPosition());
+                    price.remove(getLayoutPosition());
                     getItemCount();
                     notifyDataSetChanged();
                 }
@@ -168,16 +172,22 @@ public class AddMenuRecyclerViewWithFooterAdapter extends RecyclerView.Adapter<R
             // Find view by ID and initialize here
             TextView menuListItem;
             TextView delete;
+            TextView priceOfItem;
             menuListItem = itemView.findViewById(R.id.menuListItem);
+            priceOfItem = itemView.findViewById(R.id.menuListItem);
             delete = itemView.findViewById(R.id.delete);
         }
 
         public void bindView(int position) {
             // bindView() method to implement actions
             TextView menuListItem;
+            TextView priceOfItem;
             TextView delete;
             menuListItem = itemView.findViewById(R.id.menuListItem);
             menuListItem.setText(data.get(position));
+            priceOfItem = itemView.findViewById(R.id.price);
+            priceOfItem.setText(price.get(position).toString());
+
         }
     }
 }
