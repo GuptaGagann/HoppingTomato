@@ -47,13 +47,17 @@ public class AddMenuRecyclerViewWithFooterAdapter extends RecyclerView.Adapter<R
                 @Override
                 public void onClick(View v) {
                     //Toast.makeText(v.getContext(),menuItemName.getText()+" :: "+menuItemPrice.getText(),Toast.LENGTH_LONG).show();
-                    data.add(menuItemName.getText().toString());
-                    price.add(Float.parseFloat(menuItemPrice.getText().toString()));
-                    Toast.makeText(v.getContext(),data.get(getAdapterPosition())+" added!",Toast.LENGTH_LONG).show();
-                    menuItemName.setText(null);
-                    menuItemPrice.setText(null);
-                    notifyDataSetChanged();
-
+                    if(menuItemName.getText().toString().equals("")||menuItemPrice.getText().toString().equals("")){
+                        Toast.makeText(v.getContext(),"Menu item name and price can't be blank!",Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        data.add(menuItemName.getText().toString());
+                        price.add(Float.parseFloat(menuItemPrice.getText().toString()));
+                        Toast.makeText(v.getContext(), data.get(getAdapterPosition()) + " added!", Toast.LENGTH_SHORT).show();
+                        menuItemName.setText(null);
+                        menuItemPrice.setText(null);
+                        notifyDataSetChanged();
+                    }
                 }
             });
         }
@@ -76,6 +80,7 @@ public class AddMenuRecyclerViewWithFooterAdapter extends RecyclerView.Adapter<R
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Toast.makeText(v.getContext(), data.get(getLayoutPosition()) + " removed!", Toast.LENGTH_SHORT).show();
                     data.remove(getLayoutPosition());
                     price.remove(getLayoutPosition());
                     getItemCount();

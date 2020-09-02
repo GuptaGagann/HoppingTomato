@@ -1,6 +1,7 @@
 package com.example.gagan.hoppingtomatoapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -14,6 +15,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -37,9 +39,11 @@ public class DashboardChef extends AppCompatActivity implements NavigationView.O
 
     TextView helloChef;
 
-    String name,email,roleFlag,dob,gender,address,addressFlag;
+    String name,email,roleFlag,dob,gender,address,addressFlag,phone;
 
     private static long back_pressed;
+
+    SharedPreferences sp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,13 +53,15 @@ public class DashboardChef extends AppCompatActivity implements NavigationView.O
         setSupportActionBar(toolbar);
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
-        name = getIntent().getStringExtra("name");
-        email = getIntent().getStringExtra("email");
-        roleFlag = getIntent().getStringExtra("roleFlag");
-        dob = getIntent().getStringExtra("dob");
-        gender = getIntent().getStringExtra("gender");
-        address = getIntent().getStringExtra("address");
-        addressFlag = getIntent().getStringExtra("addressFlag");
+        sp = getSharedPreferences("login",MODE_PRIVATE);
+        name = sp.getString("name","");
+        email = sp.getString("email","");
+        roleFlag = sp.getString("roleFlag","");
+        dob = sp.getString("dob","");
+        gender = sp.getString("gender","");
+        address = sp.getString("address","");
+        addressFlag = sp.getString("addressFlag","");
+        phone = sp.getString("phone","");
 
         helloChef = findViewById(R.id.helloChef);
         helloChef.setText("Hello Chef, "+name);
@@ -152,5 +158,30 @@ public class DashboardChef extends AppCompatActivity implements NavigationView.O
 //            moveTaskToBack(true);
             }
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.logout_menu, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.logout) {
+            sp.edit().putBoolean("logged",false).apply();
+            Intent i = new Intent(this,MainActivity.class);
+            startActivity(i);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

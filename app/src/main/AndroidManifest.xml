@@ -11,14 +11,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".DashboardCustomer"/>
-        <activity android:name=".VerifyPhone" />
-        <activity android:name=".MapsActivity" />
-        <activity android:name=".DashboardChef" />
+        <activity
+            android:name=".DashboardCustomer"
+            android:noHistory="true"/>
+        <activity
+            android:name=".VerifyPhone"
+            android:noHistory="true"/>
+        <activity
+            android:name=".MapsActivity"
+            android:noHistory="true"/>
+        <activity
+            android:name=".DashboardChef"
+            android:noHistory="true"/>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

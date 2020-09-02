@@ -51,6 +51,7 @@ public class signup extends AppCompatActivity
     RadioGroup radioGroup;
     RadioButton selectedRadioButton;
 
+    private static long back_pressed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -259,7 +260,13 @@ public class signup extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if (back_pressed + 2000 > System.currentTimeMillis()) {
+                super.onBackPressed();
+            } else {
+                Toast.makeText(getBaseContext(), "Back once again to exit the app!",
+                        Toast.LENGTH_SHORT).show();
+                back_pressed = System.currentTimeMillis();
+            }
         }
     }
 

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -13,6 +14,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -72,6 +74,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleApiClient.O
 
     String name,email,roleFlag,dob,gender,address,addressFlag;
 
+    SharedPreferences sp;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,13 +103,14 @@ public class MapsActivity extends AppCompatActivity implements GoogleApiClient.O
             }
         });
 
-        name = getIntent().getStringExtra("name");
-        email = getIntent().getStringExtra("email");
-        roleFlag = getIntent().getStringExtra("roleFlag");
-        dob = getIntent().getStringExtra("dob");
-        gender = getIntent().getStringExtra("gender");
-        address = getIntent().getStringExtra("address");
-        addressFlag = getIntent().getStringExtra("addressFlag");
+        sp = getSharedPreferences("login",MODE_PRIVATE);
+        name = sp.getString("name","");
+        email = sp.getString("email","");
+        roleFlag = sp.getString("roleFlag","");
+        dob = sp.getString("dob","");
+        gender = sp.getString("gender","");
+        address = sp.getString("address","");
+        addressFlag = sp.getString("addressFlag","");
 
         hello = findViewById(R.id.hello);
         hello.setText("Hello, "+name);
@@ -115,27 +120,24 @@ public class MapsActivity extends AppCompatActivity implements GoogleApiClient.O
             public void onClick(View v) {
                 CheckEditTextIsEmptyOrNot();
                 String address = NAME+","+PHONE+","+ADD1+","+ADD2+","+ CITY+","+ STATE+"," +COUNTRY+","+ COUNTRY;
-                email = getIntent().getStringExtra("email");
-
                 String addRegistered = "1";
 
                 if(CheckEditText){
+                    sp.edit().putString("address", address).apply();
+                    sp.edit().putString("addressFlag", addRegistered).apply();
+                    sp.edit().putString("phone", phone.getText().toString()).apply();
+//                    Toast.makeText(getApplicationContext(),phone.getText().toString(),Toast.LENGTH_SHORT).show();
 
-                    addressSave(address, email,addRegistered);
-                    Toast.makeText(getApplicationContext(),address,Toast.LENGTH_SHORT).show();
-
+                    addressSave(address, email, addRegistered);
                 }
                 else {
-
                     Toast.makeText(MapsActivity.this, "Please fill all form fields.", Toast.LENGTH_LONG).show();
-
                 }
-
             }
         });
     }
-    public void CheckEditTextIsEmptyOrNot(){
 
+    public void CheckEditTextIsEmptyOrNot(){
         NAME = name_tv.getText().toString();
         PHONE=phone.getText().toString();
         ADD1=addLine1.getText().toString();
@@ -178,17 +180,17 @@ public class MapsActivity extends AppCompatActivity implements GoogleApiClient.O
 
                 regDetails = httpResponseMsg;
 
-                startActivity(new Intent(MapsActivity.this, VerifyPhone.class)
-                        .putExtra("name",name)
-                        .putExtra("email",email)
-                        .putExtra("roleFlag",roleFlag)
-                        .putExtra("dob",dob)
-                        .putExtra("gender",gender)
-                        .putExtra("address",address)
-                        .putExtra("addressFlag",addressFlag)
-                        .putExtra("phone",phone.getText().toString()));
+                Intent intent = new Intent();
+                if(Integer.parseInt(roleFlag)==1){
+                    intent = new Intent(MapsActivity.this,DashboardChef.class);
+                }
 
-                Toast.makeText(MapsActivity.this,regDetails, Toast.LENGTH_LONG).show();
+                else if(Integer.parseInt(roleFlag)==0){
+                    intent = new Intent(MapsActivity.this,DashboardCustomer.class);
+                }
+                startActivity(intent);
+
+                Toast.makeText(MapsActivity.this, regDetails, Toast.LENGTH_LONG).show();
 
             }
 
@@ -290,5 +292,43 @@ public class MapsActivity extends AppCompatActivity implements GoogleApiClient.O
                 }
             }
         }
+    }
+    private static long back_pressed;
+
+    @Override
+    public void onBackPressed() {
+
+        if (back_pressed + 2000 > System.currentTimeMillis()) {
+            super.onBackPressed();
+        } else {
+            Toast.makeText(getBaseContext(), "Back once again to exit the app!",
+                    Toast.LENGTH_SHORT).show();
+            back_pressed = System.currentTimeMillis();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.logout_menu, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.logout) {
+            sp.edit().putBoolean("logged",false).apply();
+            Intent i = new Intent(MapsActivity.this,MainActivity.class);
+            startActivity(i);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

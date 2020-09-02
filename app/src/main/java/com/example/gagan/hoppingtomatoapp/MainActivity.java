@@ -2,6 +2,7 @@ package com.example.gagan.hoppingtomatoapp;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -42,7 +43,6 @@ public class MainActivity extends AppCompatActivity
     Button reg, pass;
     String name, password, email;
 
-    DrawerLayout mDrawerLayout;
     ActionBarDrawerToggle toggle;
     String PasswordHolder, EmailHolder;
     String finalResult ;
@@ -55,7 +55,10 @@ public class MainActivity extends AppCompatActivity
 
     String firstname,lastname,registeredEmail,roleFlag,dob,gender,address,addressFlag;
 
+    DrawerLayout mDrawerLayout;
     private static long back_pressed;
+
+    SharedPreferences sp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +66,18 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        sp = getSharedPreferences("login",MODE_PRIVATE);
+        if(sp.getBoolean("logged",false)){
+            if(sp.getString("addressFlag","").equals("0")){
+                Intent i =  new Intent();
+                i = new Intent(this, MapsActivity.class);
+                startActivity(i);
+            }
+            else {
+                goToDashboard();
+            }
+        }
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
         Email = (EditText)findViewById(R.id.email);
@@ -167,7 +182,7 @@ public class MainActivity extends AppCompatActivity
                 }
                 else {
                     try {
-                        loadIntoListView(httpResponseMsg);
+                        getUserDetails(httpResponseMsg);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -192,7 +207,7 @@ public class MainActivity extends AppCompatActivity
         userLoginClass.execute(email,password);
     }
 
-    private void loadIntoListView(String json) throws JSONException {
+    private void getUserDetails(String json) throws JSONException {
         JSONArray jsonArray = new JSONArray(json);
         firstname = jsonArray.getJSONObject(0).getString("fname");
         lastname = jsonArray.getJSONObject(0).getString("lname");
@@ -207,6 +222,15 @@ public class MainActivity extends AppCompatActivity
         if(registeredEmail.equals(email)){
 
             //Toast.makeText(MainActivity.this,addressFlag,Toast.LENGTH_LONG).show();
+            sp.edit().putBoolean("logged",true).apply();
+            sp.edit().putString("name", firstname+" "+lastname).apply();
+            sp.edit().putString("email", email).apply();
+            sp.edit().putString("roleFlag", roleFlag).apply();
+            sp.edit().putString("dob", dob).apply();
+            sp.edit().putString("gender", gender).apply();
+            sp.edit().putString("address", address).apply();
+            sp.edit().putString("addressFlag", addressFlag).apply();
+
             Intent intent = new Intent();
             finish();
 
@@ -222,14 +246,6 @@ public class MainActivity extends AppCompatActivity
                     intent = new Intent(MainActivity.this, DashboardCustomer.class);
                 }
             }
-            intent.putExtra("name",firstname+" "+lastname)
-                    .putExtra("email",registeredEmail)
-                    .putExtra("roleFlag",roleFlag)
-                    .putExtra("dob",dob)
-                    .putExtra("gender",gender)
-                    .putExtra("address",address)
-                    .putExtra("addressFlag",addressFlag);
-
             startActivity(intent);
 
         }
@@ -317,5 +333,16 @@ public class MainActivity extends AppCompatActivity
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         toggle.onConfigurationChanged(newConfig);
+    }
+
+    public void goToDashboard(){
+        Intent i =  new Intent();
+        if(sp.getString("roleFlag","").equals("0")) {
+            i = new Intent(this, DashboardCustomer.class);
+        }
+        else if(sp.getString("roleFlag","").equals("1")){
+            i = new Intent(this, DashboardChef.class);
+        }
+        startActivity(i);
     }
 }

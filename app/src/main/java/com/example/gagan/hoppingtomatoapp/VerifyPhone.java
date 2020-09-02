@@ -1,6 +1,7 @@
 package com.example.gagan.hoppingtomatoapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,36 +10,40 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Map;
+
 public class VerifyPhone extends AppCompatActivity {
 
     private EditText otp;
     Button sendOTP, submitOTP;
-    TextView regDetails, phone, updatePhone;
-    Integer role_flag=1;
+    TextView phone_tv, updatePhone;
+    String name,email,roleFlag,dob,gender,address,addressFlag,phone;
 
-    String name,email,roleFlag,dob,gender,address,addressFlag;
+    SharedPreferences sp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verify_phone);
 
-        phone = findViewById(R.id.phone);
+        phone_tv = findViewById(R.id.phone);
         otp = findViewById(R.id.otp);
 
-        name = getIntent().getStringExtra("name");
-        email = getIntent().getStringExtra("email");
-        roleFlag = getIntent().getStringExtra("roleFlag");
-        dob = getIntent().getStringExtra("dob");
-        gender = getIntent().getStringExtra("gender");
-        address = getIntent().getStringExtra("address");
-        addressFlag = getIntent().getStringExtra("addressFlag");
+        sp = getSharedPreferences("login",MODE_PRIVATE);
+        name = sp.getString("name","");
+        email = sp.getString("email","");
+        roleFlag = sp.getString("roleFlag","");
+        dob = sp.getString("dob","");
+        gender = sp.getString("gender","");
+        address = sp.getString("address","");
+        addressFlag = sp.getString("addressFlag","");
+        phone = sp.getString("phone","");
 
         updatePhone = findViewById(R.id.updatePhone);
         sendOTP = findViewById(R.id.getOTP);
         submitOTP = findViewById(R.id.submitOTP);
 
-        phone.setText(getIntent().getStringExtra("phone").toString());
+        phone_tv.setText(phone);
 
         updatePhone.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,15 +63,6 @@ public class VerifyPhone extends AppCompatActivity {
                 else if(Integer.parseInt(roleFlag)==0){
                     intent = new Intent(VerifyPhone.this,DashboardCustomer.class);
                 }
-
-                intent.putExtra("name",name)
-                        .putExtra("email",email)
-                        .putExtra("roleFlag",roleFlag)
-                        .putExtra("dob",dob)
-                        .putExtra("gender",gender)
-                        .putExtra("address",address)
-                        .putExtra("addressFlag",addressFlag)
-                        .putExtra("phone",phone.getText().toString());
                 startActivity(intent);
             }
         });
@@ -77,5 +73,12 @@ public class VerifyPhone extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        Intent i=new Intent(this, MapsActivity.class);
+        startActivity(i);
     }
 }

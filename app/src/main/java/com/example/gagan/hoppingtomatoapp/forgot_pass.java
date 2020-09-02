@@ -35,15 +35,24 @@ public class forgot_pass extends AppCompatActivity {
             public void onClick(View arg0) {
                 // TODO Auto-generated method stub
                 if(!VALID_EMAIL_ADDRESS_REGEX.matcher(t1.getText().toString()).matches()){
-                    Toast.makeText(forgot_pass.this, "Incorrect email.", 4000).show();
+                    Toast.makeText(forgot_pass.this, "Incorrect email.", Toast.LENGTH_SHORT).show();
                 }
                 else{
                     b1.putString("unm", email);
-                    Toast.makeText(forgot_pass.this, "Password reset link sent on email.", 4000).show();
+                    Toast.makeText(forgot_pass.this, "Password reset link sent on email.", Toast.LENGTH_SHORT).show();
                     Intent i=new Intent(forgot_pass.this, MainActivity.class);
                     startActivity(i);
                 }
             }
         });
+
     }
+
+    @Override
+    public void onBackPressed() {
+
+        Intent i=new Intent(forgot_pass.this, MainActivity.class);
+        startActivity(i);
+    }
+
 }

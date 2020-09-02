@@ -13,15 +13,19 @@
         android:layout_weight="1"
         android:textColor="@android:color/black"
         android:background="@android:color/white"
+        android:gravity="center"
         android:padding="5dp"/>
 
     <TextView
         android:id="@+id/price"
-        android:layout_width="80dp"
+        android:layout_width="100dp"
         android:layout_height="match_parent"
+        android:justificationMode="inter_word"
         android:textColor="@android:color/black"
         android:background="@android:color/white"
-        android:layout_marginStart="10dp"/>
+        android:gravity="center"
+        android:layout_marginStart="10dp"
+        android:padding="5dp"/>
 
     <TextView
         android:id="@+id/delete"

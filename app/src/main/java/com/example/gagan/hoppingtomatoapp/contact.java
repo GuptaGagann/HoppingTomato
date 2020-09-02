@@ -14,11 +14,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class contact extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    String roleFlag;
+    private static long back_pressed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,8 +27,6 @@ public class contact extends AppCompatActivity
         setContentView(R.layout.activity_contact);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        roleFlag = getIntent().getStringExtra("roleFlag");
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -53,7 +52,13 @@ public class contact extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if (back_pressed + 2000 > System.currentTimeMillis()) {
+                super.onBackPressed();
+            } else {
+                Toast.makeText(getBaseContext(), "Back once again to exit the app!",
+                        Toast.LENGTH_SHORT).show();
+                back_pressed = System.currentTimeMillis();
+            }
         }
     }
 
@@ -84,23 +89,16 @@ public class contact extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        Intent i = new Intent();
+
         if (id == R.id.nav_home) {
-            Intent i = new Intent();
-            if(roleFlag == null){
-                i = new Intent(this, MainActivity.class).putExtra("roleFlag",roleFlag);
-            }
-            else if(Integer.parseInt(roleFlag) == 1){
-                i = new Intent(this, DashboardChef.class).putExtra("roleFlag",roleFlag);
-            }
-            else if(Integer.parseInt(roleFlag) ==0){
-                i = new Intent(this, DashboardCustomer.class).putExtra("roleFlag",roleFlag);
-            }
+            i = new Intent(this, MainActivity.class);
             startActivity(i);
         } else if (id == R.id.nav_faq) {
-            Intent i = new Intent(contact.this, faq.class).putExtra("roleFlag",roleFlag);
+            i = new Intent(this, faq.class);
             startActivity(i);
         } else if (id == R.id.nav_about) {
-            Intent i = new Intent(contact.this, about.class).putExtra("roleFlag",roleFlag);
+            i = new Intent(this, about.class);
             startActivity(i);
         } else if (id == R.id.nav_contact) {
 
@@ -111,8 +109,6 @@ public class contact extends AppCompatActivity
         } else if (id == R.id.nav_send) {
 
         }
-
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
