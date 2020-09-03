@@ -17,6 +17,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
@@ -55,6 +57,9 @@ public class AddMenu extends Fragment {
     HashMap<String,String> hashMap = new HashMap<>();
     HttpParse httpParse = new HttpParse();
     ProgressDialog progressDialog;
+
+    String menuItems, prices, availabilities;
+    String[] menuItemsArray, pricesArray, availabilitiesArray;
 
     public AddMenu() {
         // Required empty public constructor
@@ -99,6 +104,7 @@ public class AddMenu extends Fragment {
         mRecyclerView = view.findViewById(R.id.addMenu);
         viewPager = getActivity().findViewById(R.id.viewPager);
         // bind your data here.
+        initializeData();
         initializeRecyclerView();
         saveMenu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,6 +139,23 @@ public class AddMenu extends Fragment {
                 AVAILABILITY=availabilities;
                 addMenuMethod(MENU_ITEM_HOLDER, PRICE_HOLDER, Email_Holder,AVAILABILITY);
                 viewPager.setCurrentItem(1);
+                viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                    @Override
+                    public void onPageScrolled(int i, float v, int i1) {
+
+                    }
+
+                    @Override
+                    public void onPageSelected(int i) {
+                        initializeData();
+                        initializeRecyclerView();
+                    }
+
+                    @Override
+                    public void onPageScrollStateChanged(int i) {
+
+                    }
+                });
             }
         });
         return view;
@@ -189,6 +212,18 @@ public class AddMenu extends Fragment {
     }
 
     private void initializeData() {
-        for (int i = 0; i < 10; i++) data.add("Position :" + i);
+        data.clear();
+        sp = getActivity().getSharedPreferences("login", Context.MODE_PRIVATE);
+        String menuItems = sp.getString("menuItems","");
+        String prices = sp.getString("prices","");
+        String availabilities = sp.getString("availabilities","");
+        menuItemsArray = menuItems.split(",");
+        pricesArray = prices.split(",");
+        availabilitiesArray = availabilities.split(",");
+        for (int i = 0; i < menuItemsArray.length; i++) {
+            data.add(menuItemsArray[i]);
+            price.add((float) 2.0);
+//            Float.parseFloat(pricesArray[i])
+        }
     }
 }

@@ -68,6 +68,7 @@ public class DashboardChef extends AppCompatActivity implements NavigationView.O
 
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
+        viewPager.setCurrentItem(0);
         tabLayout.addTab(tabLayout.newTab().setText("Add/Update Menu"));
         tabLayout.addTab(tabLayout.newTab().setText("Manage Menu"));
         tabLayout.addTab(tabLayout.newTab().setText("Orders"));
@@ -76,6 +77,7 @@ public class DashboardChef extends AppCompatActivity implements NavigationView.O
                 tabLayout.getTabCount());
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        viewPager.setCurrentItem(1);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

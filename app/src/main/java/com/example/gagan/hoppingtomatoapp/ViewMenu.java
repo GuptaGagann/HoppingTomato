@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
@@ -54,6 +55,8 @@ public class ViewMenu extends Fragment {
     HttpParse httpParse = new HttpParse();
     public static final String UserEmail = "";
 
+    String[] menuItems, prices, availabilities;
+
 
     public ViewMenu() {
         // Required empty public constructor
@@ -74,6 +77,7 @@ public class ViewMenu extends Fragment {
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -82,8 +86,6 @@ public class ViewMenu extends Fragment {
         super.onCreate(savedInstanceState);
         sp = getActivity().getSharedPreferences("login", Context.MODE_PRIVATE);
         email = sp.getString("email","");
-        GetMenuFunction(email);
-
 
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -98,28 +100,46 @@ public class ViewMenu extends Fragment {
     }
 
     private void initializeData() {
-        for (int i = 0; i < 10; i++) data.add("Position :" + i);
+        data.clear();
+        for (int i = 0; i < menuItems.length; i++) {
+            data.add(menuItems[i]+" : "+prices[i]);
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        GetMenuFunction(email);
         View view = inflater.inflate(R.layout.fragment_view_menu,container,false);
         editMenu = view.findViewById(R.id.editMenu);
         mRecyclerView = view.findViewById(R.id.menuChef);
         viewPager = getActivity().findViewById(R.id.viewPager);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                GetMenuFunction(email);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
         // bind your data here.
-        initializeData();
-        initializeRecyclerView();
         editMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 viewPager.setCurrentItem(0);
             }
         });
         return view;
+
     }
     public void GetMenuFunction(final String email){
 
@@ -137,12 +157,14 @@ public class ViewMenu extends Fragment {
                 super.onPostExecute(httpResponseMsg);
 
                 progressDialog.dismiss();
-
-                   Toast.makeText(getContext(),httpResponseMsg,Toast.LENGTH_LONG).show();
+                //Toast.makeText(getContext(),httpResponseMsg,Toast.LENGTH_LONG).show();
+                try {
+                    getChefMenu(httpResponseMsg);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
             }
-
-
 
             @Override
             protected String doInBackground(String... params) {
@@ -156,6 +178,15 @@ public class ViewMenu extends Fragment {
         GetMenuClass getMenuClass = new GetMenuClass();
 
         getMenuClass.execute(email);
+    }
+
+    private void getChefMenu(String json) throws JSONException {
+        JSONArray jsonArray = new JSONArray(json);
+        menuItems = jsonArray.getJSONObject(0).getString("menuitem").split(",");
+        prices = jsonArray.getJSONObject(0).getString("menuprice").split(",");
+        availabilities = jsonArray.getJSONObject(0).getString("availability").split(",");
+        initializeData();
+        initializeRecyclerView();
     }
 
 }
