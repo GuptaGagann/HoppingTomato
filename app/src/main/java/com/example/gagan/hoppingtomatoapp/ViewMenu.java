@@ -1,6 +1,10 @@
 package com.example.gagan.hoppingtomatoapp;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -11,8 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 /**
@@ -23,6 +31,9 @@ import java.util.ArrayList;
 public class ViewMenu extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    String email;
+    SharedPreferences sp;
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -36,6 +47,12 @@ public class ViewMenu extends Fragment {
     Button editMenu;
 
     ViewPager viewPager;
+    String finalResult ;
+    String HttpURL = "https://hoppingtomato.swatantranews.info/getMenu.php";
+    ProgressDialog progressDialog;
+    HashMap<String,String> hashMap = new HashMap<>();
+    HttpParse httpParse = new HttpParse();
+    public static final String UserEmail = "";
 
 
     public ViewMenu() {
@@ -63,6 +80,11 @@ public class ViewMenu extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sp = getActivity().getSharedPreferences("login", Context.MODE_PRIVATE);
+        email = sp.getString("email","");
+        GetMenuFunction(email);
+
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -99,4 +121,41 @@ public class ViewMenu extends Fragment {
         });
         return view;
     }
+    public void GetMenuFunction(final String email){
+
+        class GetMenuClass extends AsyncTask<String,Void,String> {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+
+                progressDialog = ProgressDialog.show(getContext(),"Loading Data",null,true,true);
+            }
+            @Override
+            protected void onPostExecute(String httpResponseMsg) {
+
+                super.onPostExecute(httpResponseMsg);
+
+                progressDialog.dismiss();
+
+                   Toast.makeText(getContext(),httpResponseMsg,Toast.LENGTH_LONG).show();
+
+            }
+
+
+
+            @Override
+            protected String doInBackground(String... params) {
+
+                hashMap.put("email",params[0]);
+                finalResult = httpParse.postRequest(hashMap, HttpURL);
+                return finalResult;
+            }
+        }
+
+        GetMenuClass getMenuClass = new GetMenuClass();
+
+        getMenuClass.execute(email);
+    }
+
 }

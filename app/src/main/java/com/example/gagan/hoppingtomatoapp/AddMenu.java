@@ -50,7 +50,7 @@ public class AddMenu extends Fragment {
     SharedPreferences sp;
 
     String HttpURL = "https://swatantranews.info/menuSave.php";
-    String MENU_ITEM_HOLDER, PRICE_HOLDER, Email_Holder;
+    String MENU_ITEM_HOLDER, PRICE_HOLDER, Email_Holder,AVAILABILITY;
     String finalResult ;
     HashMap<String,String> hashMap = new HashMap<>();
     HttpParse httpParse = new HttpParse();
@@ -130,14 +130,15 @@ public class AddMenu extends Fragment {
                 MENU_ITEM_HOLDER=itemsName;
                 PRICE_HOLDER=prices;
                 Email_Holder=email;
-                addMenuMethod(MENU_ITEM_HOLDER, PRICE_HOLDER, Email_Holder);
+                AVAILABILITY=availabilities;
+                addMenuMethod(MENU_ITEM_HOLDER, PRICE_HOLDER, Email_Holder,AVAILABILITY);
                 viewPager.setCurrentItem(1);
             }
         });
         return view;
     }
 
-    private void addMenuMethod(final String MENU_ITEM, final String ITEM_PRICE, final String EMAIL) {
+    private void addMenuMethod(final String MENU_ITEM, final String ITEM_PRICE, final String EMAIL, final String AVAILABLE) {
         class AddRegisterFunctionClass extends AsyncTask<String,Void,String> {
 
             @Override
@@ -167,6 +168,8 @@ public class AddMenu extends Fragment {
 
                 hashMap.put("email",params[2]);
 
+                hashMap.put("available",params[3]);
+
 
                 finalResult = httpParse.postRequest(hashMap, HttpURL);
 
@@ -176,7 +179,7 @@ public class AddMenu extends Fragment {
 
         AddRegisterFunctionClass userRegisterFunctionClass = new AddRegisterFunctionClass();
 
-        userRegisterFunctionClass.execute(MENU_ITEM,ITEM_PRICE,EMAIL);
+        userRegisterFunctionClass.execute(MENU_ITEM,ITEM_PRICE,EMAIL,AVAILABLE);
     }
 
     private void initializeRecyclerView() {
