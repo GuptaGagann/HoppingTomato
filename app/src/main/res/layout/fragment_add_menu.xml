@@ -11,15 +11,16 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add Menu"/>
-
+        android:text="Add menu"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/addMenu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginVertical="@dimen/linear_layout_margin"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:focusableInTouchMode="true"
+        android:descendantFocusability="beforeDescendants">
 
     </android.support.v7.widget.RecyclerView>
 

@@ -27,6 +27,19 @@
         android:layout_marginStart="10dp"
         android:padding="5dp"/>
 
+    <Switch
+        android:id="@+id/availability"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
+        android:padding="5dp"
+        android:background="@android:color/white"
+        android:textColor="@android:color/black"
+        android:textOn="available"
+        android:textOff="unavailable"
+        android:layout_marginStart="10dp" />
+
     <TextView
         android:id="@+id/delete"
         android:layout_width="wrap_content"

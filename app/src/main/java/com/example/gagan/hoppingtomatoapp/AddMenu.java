@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -105,6 +106,7 @@ public class AddMenu extends Fragment {
                 int count=mRecyclerView.getAdapter().getItemCount();
                 String itemsName = "";
                 String prices = "";
+                String availabilities = "";
                 for(int i=0; i<count-1; i++) {
                     View itemView = mRecyclerView.findViewHolderForAdapterPosition(i).itemView;
                     TextView itemName = itemView.findViewById(R.id.menuListItem);
@@ -117,10 +119,18 @@ public class AddMenu extends Fragment {
                     prices += price.getText()+",";
                 }
 
+                for(int i=0; i<count-1; i++) {
+                    View itemView = mRecyclerView.findViewHolderForAdapterPosition(i).itemView;
+                    Switch availability = itemView.findViewById(R.id.availability);
+                    availabilities += availability.isChecked()+",";
+                }
+
+                Toast.makeText(getContext(),availabilities,Toast.LENGTH_SHORT).show();
+
                 MENU_ITEM_HOLDER=itemsName;
                 PRICE_HOLDER=prices;
                 Email_Holder=email;
-                addMenuMethod(MENU_ITEM_HOLDER,PRICE_HOLDER, Email_Holder);
+                addMenuMethod(MENU_ITEM_HOLDER, PRICE_HOLDER, Email_Holder);
                 viewPager.setCurrentItem(1);
             }
         });
