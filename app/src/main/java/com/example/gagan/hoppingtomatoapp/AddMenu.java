@@ -1,5 +1,9 @@
 package com.example.gagan.hoppingtomatoapp;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -15,6 +19,7 @@ import android.widget.Toast;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 /**
@@ -39,6 +44,16 @@ public class AddMenu extends Fragment {
     Button saveMenu;
 
     ViewPager viewPager;
+
+    String email;
+    SharedPreferences sp;
+
+    String HttpURL = "https://swatantranews.info/menuSave.php";
+    String MENU_ITEM_HOLDER, PRICE_HOLDER, Email_Holder;
+    String finalResult ;
+    HashMap<String,String> hashMap = new HashMap<>();
+    HttpParse httpParse = new HttpParse();
+    ProgressDialog progressDialog;
 
     public AddMenu() {
         // Required empty public constructor
@@ -65,6 +80,9 @@ public class AddMenu extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        sp = getActivity().getSharedPreferences("login", Context.MODE_PRIVATE);
+        email = sp.getString("email","");
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -87,23 +105,68 @@ public class AddMenu extends Fragment {
                 int count=mRecyclerView.getAdapter().getItemCount();
                 String itemsName = "";
                 String prices = "";
-                for(int i=0; i<count; i++) {
-                    View itemView = mRecyclerView.findViewHolderForAdapterPosition(0).itemView;
+                for(int i=0; i<count-1; i++) {
+                    View itemView = mRecyclerView.findViewHolderForAdapterPosition(i).itemView;
                     TextView itemName = itemView.findViewById(R.id.menuListItem);
                     itemsName += itemName.getText()+",";
                 }
 
-                for(int i=0; i<count; i++) {
-                    View itemView = mRecyclerView.findViewHolderForAdapterPosition(0).itemView;
+                for(int i=0; i<count-1; i++) {
+                    View itemView = mRecyclerView.findViewHolderForAdapterPosition(i).itemView;
                     TextView price = itemView.findViewById(R.id.price);
                     prices += price.getText()+",";
                 }
-                Toast.makeText(getContext(),itemsName,Toast.LENGTH_SHORT).show();
-                Toast.makeText(getContext(),prices,Toast.LENGTH_SHORT).show();
+
+                MENU_ITEM_HOLDER=itemsName;
+                PRICE_HOLDER=prices;
+                Email_Holder=email;
+                addMenuMethod(MENU_ITEM_HOLDER,PRICE_HOLDER, Email_Holder);
                 viewPager.setCurrentItem(1);
             }
         });
         return view;
+    }
+
+    private void addMenuMethod(final String MENU_ITEM, final String ITEM_PRICE, final String EMAIL) {
+        class AddRegisterFunctionClass extends AsyncTask<String,Void,String> {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+
+                progressDialog = ProgressDialog.show(getContext(),"Loading Data",null,true,true);
+            }
+
+            @Override
+            protected void onPostExecute(String httpResponseMsg) {
+
+                super.onPostExecute(httpResponseMsg);
+
+                progressDialog.dismiss();
+
+                Toast.makeText(getContext(),httpResponseMsg, Toast.LENGTH_LONG).show();
+
+            }
+
+            @Override
+            protected String doInBackground(String... params) {
+
+                hashMap.put("menuitem",params[0]);
+
+                hashMap.put("itemprice",params[1]);
+
+                hashMap.put("email",params[2]);
+
+
+                finalResult = httpParse.postRequest(hashMap, HttpURL);
+
+                return finalResult;
+            }
+        }
+
+        AddRegisterFunctionClass userRegisterFunctionClass = new AddRegisterFunctionClass();
+
+        userRegisterFunctionClass.execute(MENU_ITEM,ITEM_PRICE,EMAIL);
     }
 
     private void initializeRecyclerView() {
